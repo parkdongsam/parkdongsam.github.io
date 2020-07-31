@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
-     <loc>None</loc>
-     <lastmod>2020-07-27</lastmod>
+     <loc>https://parkdongsam.github.io/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/about/about/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/devops/devops/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/devops/ansible/ansible-00/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/devops/ansible/ansible-01/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/devops/atom/atom-00/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/devops/atom/atom-01/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/devops/go/go-00/</loc>
+     <lastmod>2020-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://parkdongsam.github.io/devops/markdown/markdown-00/</loc>
+     <lastmod>2020-07-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
