@@ -45,6 +45,10 @@
   color: #ff0000;
 }
 
+.reddit {
+  color: #FF4301;
+}
+
 
 @keyframes heart {
   0%, 40%, 80%, 100% {
