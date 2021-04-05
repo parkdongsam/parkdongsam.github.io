@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)https://docs.saltproject.io/en/getstarted/system/communication.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Communication</title>
+
+    <link rel="stylesheet" href="./Communication_files/core.css">
+    <link rel="stylesheet" href="./Communication_files/getstarted.css">
+    <link rel="shortcut icon" href="https://docs.saltproject.io/en/latest/css/images/saltStack_favIcon_32x32.png">
+
+</head>
+<body>
+
+<nav id="globalNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://saltstack.com/" target="_blank"><img src="./Communication_files/saltstack.svg" height="40px" width="170px" class="nolightbox"></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="nav navbar-nav">
+                <li><a href="https://docs.saltproject.io/en/latest/">Overview</a></li>
+                <li><a href="https://docs.saltproject.io/en/getstarted/">Tutorials</a></li>
+                <li><a href="https://docs.saltproject.io/en/latest/contents.html">Documentation</a></li>
+                <li><a href="https://repo.saltstack.com/">Downloads</a></li>
+                <li><a href="https://docs.saltproject.io/en/latest/topics/development/">Develop</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="jumbotron">
+
+    <div class="row row-centered">
+        <div class="col-md-9 col-centered">
+            <h1>Understanding SaltStack</h1>
+
+            <h3>Get Started Tutorial</h3>
+
+        </div>
+    </div>
+    <!--<div class="gs-top-nav">
+        <a href="/en/getstarted/getstarted/index.html">Back to Get Started <i class="glyphicon glyphicon-arrow-left"></i></a><br>
+        <a href="/en/getstarted">Back to Documentation <i class="glyphicon glyphicon-arrow-left"></i></a>
+    </div>-->
+</div>
+
+
+
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="progtrckr" data-progtrckr-steps="8">
+                
+                
+                
+                <li class="progtrckr-done">
+                    
+                    <a href="https://docs.saltproject.io/en/getstarted/system/index.html">Salt Approach</a>
+                </li>
+                
+                
+                
+                
+                <li class="progtrckr-done">
+                    
+                    <a href="https://docs.saltproject.io/en/getstarted/system/plugins.html">Plug-ins</a>
+                </li>
+                
+                
+                
+                <li class="progtrckr-done">Communication</li>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                <li class="progtrckr-todo">
+                    
+                    <a href="https://docs.saltproject.io/en/getstarted/system/execution.html">Remote Execution</a>
+                </li>
+                
+                
+                
+                
+                <li class="progtrckr-todo">
+                    
+                    <a href="https://docs.saltproject.io/en/getstarted/system/states.html">States</a>
+                </li>
+                
+                
+                
+                
+                <li class="progtrckr-todo">
+                    
+                    <a href="https://docs.saltproject.io/en/getstarted/system/runners.html">Runners</a>
+                </li>
+                
+                
+                
+                
+                <li class="progtrckr-todo">
+                    
+                    <a href="https://docs.saltproject.io/en/getstarted/system/data.html">System Data</a>
+                </li>
+                
+                
+                
+                
+                <li class="progtrckr-todo">
+                    
+                    <a href="https://docs.saltproject.io/en/getstarted/system/python.html">Python</a>
+                </li>
+                
+                
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+
+            
+
+            <h1 id="communication-security">Communication &amp; Security</h1>
+<p>This section describes the Salt communication model along with a basic overview of authentication and security.</p>
+<h2 id="architecture-model">Architecture Model</h2>
+<p>Salt uses a server-agent communication model, (though it works well as a standalone single-server management utility, and also provides the ability to run agentless over SSH). The server component is called the Salt master, and the agent is called the Salt minion.</p>
+<p><a href="./Communication_files/master-minion.png" data-lightbox="undefined"><img width="30%" class="imgcenter" src="./Communication_files/master-minion.png"></a></p>
+<p>The Salt master is responsible for sending commands to Salt minions, and then aggregating and displaying the results of those commands. A single Salt master can manage thousands of systems.</p>
+<h2 id="communication-model">Communication Model</h2>
+<p>Salt communicates with managed systems using a <a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">publish-subscribe</a> pattern. Connections are initiated by the Salt minion, which means that you do not need to open any incoming ports on those systems (thereby reducing the attack vector). The Salt master uses ports 4505 and 4506, which must be opened to accept incoming connections.</p>
+<p><a href="./Communication_files/basic-comm.png" data-lightbox="undefined"><img height="30px" class="imgcenter" src="./Communication_files/basic-comm.png"></a></p>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Publisher</strong></td>
+<td align="left">(port 4505) All Salt minions establish a persistent connection to the publisher port where they listen for messages. Commands are sent asynchronously to all connections over this port, which enables commands to be executed over large numbers of systems simultaniously.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Request Server</strong></td>
+<td align="left">(port 4506) Salt minions connect to the request server as needed to send results to the Salt master, and to securely request files and minion-specific data values (called Salt pillar). Connections to this port are 1:1 between the Salt master and Salt minion (not asynchronous).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="salt-minion-authentication">Salt Minion Authentication</h2>
+<p>When the minion starts for the first time, it searches the network for a system named <code>salt</code> (though this can be easily changed to an IP or different hostname). When found, the minion initiates a handshake and then sends its public key to the Salt master.</p>
+<p><a href="./Communication_files/public-key.png" data-lightbox="undefined"><img width="30%" class="imgcenter" src="./Communication_files/public-key.png"></a></p>
+<p>After this initial connection, the Salt minion’s public key is stored on the server, and it must be accepted on the Salt master using the <code>salt-key</code> command (or through some automated mechanism). This can be a source of confusion for new users since Salt won’t provide the security key required to decode messages until the Salt minion’s public key is accepted (which means that the Salt minion won’t run any commands until its key is accepted).</p>
+<p>After the minion key is accepted, the Salt master returns its public key along with a rotating AES key that is used to encrypt and decrypt messages that are sent by the Salt master. The returned AES key is encrypted using the public key initially sent by the Salt minion, and can therefore be decrypted only by that Salt minion.</p>
+<h2 id="secure-communication">Secure Communication</h2>
+<p>All further communication between the Salt master and the Salt minion is encrypted using AES keys. The AES encryption key uses an explicit initialization vector and a CBC block-chaining algorithm in accordance with the latest accepted version of TLS.</p>
+<h2 id="rotating-security-keys">Rotating Security Keys</h2>
+<p>A rotating AES key is used to encrypt jobs that are sent to the Salt minion by the Salt master, and to encrypt connections to the Salt master fileserver. A new key is generated and used each time the Salt master restarts and each time a Salt minion key is deleted using the salt-key command.</p>
+<p>After the key is rotated, all Salt minions must re-authenticate to receive the updated key. This enables the AES key to rotate without interrupting the minion connection.</p>
+<h2 id="encrypted-communication-channels">Encrypted Communication Channels</h2>
+<p>Publication communication between the Salt master and Salt minion is encrypted using a rotating AES key. Direct communication between the Salt master and Salt minion is encrypted using a unique AES key for each session.</p>
+<p>For example, published jobs are encrypted using the rotating AES key, while secure, minion-specific data sent using Salt pillar is encrypted with a unique AES key for each Salt minion and session.</p>
+<h2 id="user-access-control">User Access Control</h2>
+<p>Before a command is sent to minions, Salt performs some internal checks against the Publisher ACL to make sure that the user executing the command has the correct privileges. If the user is authorized to run the specified command against the specified target, the command is sent. If not, an error is returned. Salt also returns a list of the minions that are expected to respond to the command line interface, so it knows how long to wait for returns.</p>
+<p>Next, we’ll go over the main pluggable subsystems that you’ll use to manage infrastructure, starting with remote execution.</p>
+
+
+            <br>
+            
+            <a href="https://docs.saltproject.io/en/getstarted/system/plugins.html">
+                <button type="button" class="btn btn-secondary"><span class="glyphicon glyphicon-chevron-left"></span> Previous
+                </button>
+            </a>
+            
+
+            
+            <a href="https://docs.saltproject.io/en/getstarted/system/execution.html">
+                <button type="button" class="btn btn-primary btn-right">
+                    Next <span class="glyphicon glyphicon-chevron-right"></span></button>
+            </a>
+            
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="footer">
+  <p>© 2016 SaltStack. All Rights Reserved, SaltStack Inc. | <a href="http://saltstack.com/privacy-policy" target="_blank">Privacy Policy</a></p>
+</div>
+</div>
+
+<script type="text/javascript" async="" src="./Communication_files/inpage_linkid.js" id="undefined"></script><script type="text/javascript" async="" src="./Communication_files/ga.js"></script><script type="text/javascript" src="./Communication_files/core-min.js"></script><div id="lightboxOverlay" class="lightboxOverlay" style="display: none;"></div><div id="lightbox" class="lightbox" style="display: none;"><div class="lb-outerContainer"><div class="lb-container"><a href="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lightbox="undefined"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="></a><div class="lb-nav"><a class="lb-prev" href="https://docs.saltproject.io/en/getstarted/system/communication.html"></a><a class="lb-next" href="https://docs.saltproject.io/en/getstarted/system/communication.html"></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>
+
+
+
+<!--analytics-->
+<script type="text/javascript">llactid=23943</script>
+<script type="text/javascript" src="./Communication_files/trackalyze_secure.js"></script>
+
+<script>
+          var _gaq = _gaq || [];
+          var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+          _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+          _gaq.push(['_setAccount', 'UA-26984928-1']);
+          _gaq.push(['_setDomainName', 'saltstack.com']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+              var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+</script>
+
+
+</body></html>
