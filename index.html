@@ -25,6 +25,7 @@
 
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/motion.css" />
 </head>
 <body>
   <main class="page">
@@ -32,25 +33,26 @@
     <!-- ============================ INVITATION ============================ -->
     <section class="sec hero" aria-labelledby="h-inv">
       <p class="label" id="h-inv">Invitation</p>
-      <h1 class="title" data-bind="headline"></h1>
+      <h1 class="title" data-bind="headline" data-reveal="mask"></h1>
 
-      <blockquote class="quote" data-lines="quote.lines" data-optional></blockquote>
+      <blockquote class="quote" data-lines="quote.lines" data-optional data-reveal="lines"></blockquote>
       <p class="quote__src" data-bind="quote.source" data-optional></p>
 
-      <div class="invite" data-lines="invitation" data-reveal></div>
+      <div class="invite" data-lines="invitation" data-reveal="lines"></div>
 
-      <div class="names" data-names data-reveal></div>
+      <div class="names" data-names data-reveal="stagger"></div>
+      <div class="cue" aria-hidden="true"><span></span></div>
     </section>
 
     <!-- =============================== DATE =============================== -->
-    <section class="sec" aria-labelledby="h-date">
+    <section class="sec" aria-labelledby="h-date" data-reveal="rule">
       <p class="label" id="h-date">Date</p>
-      <h2 class="date__big" data-reveal>
+      <h2 class="date__big" data-reveal="mask">
         <time data-date-iso data-date-big></time>
       </h2>
       <p class="date__sub" data-date-sub data-reveal></p>
 
-      <div class="cal" data-reveal>
+      <div class="cal" data-reveal="cal">
         <div class="cal__head" aria-hidden="true">
           <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
         </div>
@@ -70,15 +72,15 @@
     </section>
 
     <!-- ============================= LOCATION ============================= -->
-    <section class="sec" aria-labelledby="h-loc">
+    <section class="sec" aria-labelledby="h-loc" data-reveal="rule">
       <p class="label" id="h-loc">Location</p>
-      <h2 class="title">오시는 길</h2>
+      <h2 class="title" data-reveal="mask">오시는 길</h2>
 
       <p class="venue__name" data-venue-name data-reveal></p>
       <p class="venue__addr" data-bind="venue.address" data-reveal></p>
       <p class="venue__tel" data-reveal>Tel. <span data-bind="venue.tel"></span></p>
 
-      <figure class="map" data-reveal>
+      <figure class="map" data-reveal="map">
         <!-- src 를 정적으로 둬야 브라우저가 JS 기다리지 않고 바로 받는다. data.js 가 덮어쓴다. -->
         <img data-sketch src="images/map-sketch.png" width="1180" height="840" loading="lazy" decoding="async"
              alt="오펠리스 웨딩컨벤션 약도 — 시청역 9번 출구 도보 4분, 서울역 3번 출구 도보 10분" />
@@ -113,16 +115,16 @@
     </section>
 
     <!-- =========================== INFORMATION ============================ -->
-    <section class="sec" aria-labelledby="h-info" data-hide-if-empty="info">
+    <section class="sec" aria-labelledby="h-info" data-hide-if-empty="info" data-reveal="rule">
       <p class="label" id="h-info">Information</p>
-      <h2 class="title">예식정보 및 안내사항</h2>
+      <h2 class="title" data-reveal="mask">예식정보 및 안내사항</h2>
       <div class="info" data-info data-reveal></div>
     </section>
 
     <!-- ============================== GALLERY ============================= -->
-    <section class="sec" aria-labelledby="h-gal">
+    <section class="sec" aria-labelledby="h-gal" data-reveal="rule">
       <p class="label" id="h-gal">Gallery</p>
-      <h2 class="title">웨딩 갤러리</h2>
+      <h2 class="title" data-reveal="mask">웨딩 갤러리</h2>
 
       <div class="gal" data-reveal>
         <div class="gal__stage">
@@ -140,10 +142,10 @@
     </section>
 
     <!-- ============================== ACCOUNT ============================= -->
-    <section class="sec" aria-labelledby="h-acct">
+    <section class="sec" aria-labelledby="h-acct" data-reveal="rule">
       <p class="label" id="h-acct">Account</p>
-      <h2 class="title">마음 전하실 곳</h2>
-      <div class="lead" data-lines="accountNote" data-reveal></div>
+      <h2 class="title" data-reveal="mask">마음 전하실 곳</h2>
+      <div class="lead" data-lines="accountNote" data-reveal="lines"></div>
 
       <div class="tabs" role="tablist" aria-label="계좌 구분" data-reveal>
         <button class="tab" role="tab" type="button" data-side="groom" aria-selected="true">신랑측</button>

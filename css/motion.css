@@ -1,0 +1,237 @@
+/* ==========================================================================
+   모션
+   --------------------------------------------------------------------------
+   원칙 1 — 움직임은 '구조'에 건다. 괘선이 그어지고, 달력이 놓이고, 지도가
+            펼쳐진다. 본문 문장은 아래에서 밀려 올라오기만 하고, 읽는 동안엔
+            절대 움직이지 않는다. 가독성이 먼저다.
+   원칙 2 — JS 가 <html> 에 .js 를 붙이기 전까지 아무것도 숨기지 않는다.
+            스크립트가 늦거나 실패해도 청첩장은 흰 화면이 아니라 전부 읽힌다.
+   원칙 3 — prefers-reduced-motion 이면 전부 끈다. 끄더라도 내용은 그대로 보인다.
+   ========================================================================== */
+
+:root {
+  --m-dur: 780ms;      /* 기본 진입 */
+  --m-draw: 1100ms;    /* 선이 그어지는 시간 — 눈으로 따라갈 수 있어야 한다 */
+  --m-step: 100ms;     /* 줄 사이 시차 — 한 줄씩 읽히도록 충분히 벌린다 */
+  --m-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   기본 — 떠오르며 나타난다
+   -------------------------------------------------------------------------- */
+:root.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--m-dur) var(--m-ease),
+    transform var(--m-dur) var(--m-ease);
+  transition-delay: var(--m-delay, 0ms);
+}
+:root.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* 아래 변형들은 컨테이너 자체를 숨기지 않는다. 안쪽 요소가 각자 움직인다. */
+:root.js [data-reveal='lines'],
+:root.js [data-reveal='mask'],
+:root.js [data-reveal='rule'],
+:root.js [data-reveal='cal'],
+:root.js [data-reveal='map'],
+:root.js [data-reveal='stagger'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   문장 — 한 줄씩 아래에서 밀려 올라온다
+   .rv-l 은 창, 그 안의 span 이 올라온다. line-height 1.85 덕에 잘리지 않는다.
+   -------------------------------------------------------------------------- */
+/* 창을 글줄보다 위아래로 조금 키우고 그만큼 음수 마진으로 되돌린다.
+   line-height 가 1 인 큰 숫자에서 Cormorant 의 '5' 꼬리가 잘리던 문제.
+   자리는 그대로 두면서 잉크가 넘칠 자리만 벌어 준다. */
+.rv-l {
+  /* 인라인이면 overflow 도 세로 패딩도 먹지 않는다. 창은 반드시 블록이어야 한다. */
+  display: block;
+  overflow: hidden;
+  padding-block: 0.18em;
+  margin-block: -0.18em;
+}
+:root.js [data-reveal='lines'] .rv-l > span,
+:root.js [data-reveal='mask'] .rv-l > span {
+  display: block;
+  transform: translateY(110%);
+  opacity: 0;
+  transition:
+    transform var(--m-dur) var(--m-ease),
+    opacity calc(var(--m-dur) * 0.6) linear;
+  transition-delay: calc(var(--i, 0) * var(--m-step) + var(--m-delay, 0ms));
+}
+:root.js [data-reveal='lines'].is-in .rv-l > span,
+:root.js [data-reveal='mask'].is-in .rv-l > span {
+  transform: none;
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   차례로 — 이름 줄, 계좌 카드처럼 '목록'인 것들
+   -------------------------------------------------------------------------- */
+:root.js [data-reveal='stagger'] > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity var(--m-dur) var(--m-ease),
+    transform var(--m-dur) var(--m-ease);
+  transition-delay: calc(var(--i, 0) * 110ms + var(--m-delay, 0ms));
+}
+:root.js [data-reveal='stagger'].is-in > * { opacity: 1; transform: none; }
+
+/* --------------------------------------------------------------------------
+   괘선 — 왼쪽에서 오른쪽으로 그어진다
+   섹션을 가르는 선이 스스로 그려지면서 다음 장이 시작된다는 신호가 된다.
+   -------------------------------------------------------------------------- */
+.sec + .sec { position: relative; }
+:root.js .sec + .sec[data-reveal='rule'] { border-top-color: transparent; }
+:root.js .sec + .sec[data-reveal='rule']::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 0; right: 0; height: 1px;
+  background: var(--rule);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--m-draw) var(--m-ease);
+}
+:root.js .sec + .sec[data-reveal='rule'].is-in::before { transform: scaleX(1); }
+
+/* gothic 의 검은 라벨 괘선도 같이 그어진다 (스위스 그리드의 그 선) */
+:root[data-theme='gothic'] .sec + .sec .label { position: relative; }
+:root.js[data-theme='gothic'] .sec + .sec[data-reveal='rule'] .label {
+  border-top-color: transparent;
+}
+:root.js[data-theme='gothic'] .sec + .sec[data-reveal='rule'] .label::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 0; right: 0; height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 900ms var(--m-ease) 140ms;
+}
+:root.js[data-theme='gothic'] .sec + .sec[data-reveal='rule'].is-in .label::before {
+  transform: scaleX(1);
+}
+
+/* --------------------------------------------------------------------------
+   달력 — 날짜가 차례로 놓이고, 마지막에 하트가 그려진다
+   -------------------------------------------------------------------------- */
+:root.js [data-reveal='cal'] .cal__cell {
+  opacity: 0;
+  transform: translateY(9px);
+  transition:
+    opacity 440ms var(--m-ease),
+    transform 440ms var(--m-ease);
+  transition-delay: calc(var(--i, 0) * 24ms);
+}
+:root.js [data-reveal='cal'].is-in .cal__cell { opacity: 1; transform: none; }
+
+/* 예식일 하트 — 인쇄된 카드와 같은 표기. 획이 한 번에 그려진다. */
+.cal__heart {
+  position: absolute;
+  width: 2.875rem; height: 2.875rem;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -54%);
+  z-index: -1;
+  overflow: visible;
+  pointer-events: none;
+}
+.cal__heart path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+:root.js [data-reveal='cal'] .cal__heart path {
+  /* --len 은 JS 가 getTotalLength() 로 넣는다 */
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  transition: stroke-dashoffset var(--m-draw) var(--m-ease) 560ms;
+}
+:root.js [data-reveal='cal'].is-in .cal__heart path { stroke-dashoffset: 0; }
+
+/* --------------------------------------------------------------------------
+   약도 — 위에서 아래로 펼쳐진다
+   -------------------------------------------------------------------------- */
+:root.js [data-reveal='map'] img {
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  transition:
+    clip-path 1150ms var(--m-ease),
+    opacity 420ms linear;
+}
+:root.js [data-reveal='map'].is-in img {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   카운트다운 — 숫자가 바뀔 때만 굴러간다 (JS: Web Animations API)
+   여기서는 자리만 잡아 둔다. 상시 애니메이션은 없다.
+   -------------------------------------------------------------------------- */
+.count__num { will-change: transform; }
+
+/* --------------------------------------------------------------------------
+   스크롤 유도선 — 이 페이지에서 유일하게 계속 움직이는 것
+   위에서 자라 내려갔다가 아래로 빠진다. 1px 짜리 선 하나.
+   -------------------------------------------------------------------------- */
+.cue {
+  width: 1px;
+  height: 3.5rem;
+  margin: 2.5rem auto 0;
+  position: relative;
+  overflow: hidden;
+}
+.cue span {
+  position: absolute;
+  inset: 0;
+  background: var(--ink-3);
+  transform: scaleY(0);
+}
+:root.js .cue span { animation: cue 2600ms var(--m-ease) infinite; }
+@keyframes cue {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  45%  { transform: scaleY(1); transform-origin: top; }
+  55%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+[data-theme='gothic'] .cue { margin-left: 0; }
+
+/* --------------------------------------------------------------------------
+   손끝 반응 — 누르면 눌린다
+   -------------------------------------------------------------------------- */
+.btn:active,
+.tab:active,
+.gal__arrow:active,
+.gal__thumb:active { transform: scale(0.97); }
+
+/* --------------------------------------------------------------------------
+   움직임을 원하지 않는 사용자 — 전부 끈다. 내용은 전부 보인다.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  :root.js [data-reveal],
+  :root.js [data-reveal='stagger'] > *,
+  :root.js .rv-l > span,
+  :root.js [data-reveal='cal'] .cal__cell {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  :root.js [data-reveal='map'] img { clip-path: none !important; opacity: 1 !important; }
+  :root.js [data-reveal='rule']::before,
+  :root.js [data-reveal='rule'] .label::before { transform: scaleX(1) !important; }
+  :root.js [data-reveal='cal'] .cal__heart path { stroke-dashoffset: 0 !important; }
+  .cue { display: none; }
+  .gal__track { scroll-behavior: auto; }
+}

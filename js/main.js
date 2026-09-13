@@ -15,6 +15,34 @@
   };
   const pad = (n) => String(n).padStart(2, '0');
 
+  /* ---- 모션 --------------------------------------------------------------
+   * .js 가 붙어야 css/motion.css 가 요소를 숨기기 시작한다. 스크립트가
+   * 여기까지 못 오면 아무것도 숨겨지지 않고 청첩장은 그대로 다 읽힌다.
+   * ------------------------------------------------------------------- */
+  const MOTION = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.documentElement.classList.add('js');
+
+  /* 자식마다 --i 를 매겨 차례로 나오게 한다 */
+  const stagger = (nodes) =>
+    nodes.forEach((n, i) => n.style.setProperty('--i', i));
+
+  /* 한 줄을 창(.rv-l) + 올라오는 알맹이(span) 로 감싼다.
+     창이 넘치는 부분을 잘라내므로 글자가 '아래에서' 올라오는 것처럼 보인다. */
+  const maskLine = (text) => {
+    const p = el('p', 'rv-l');
+    p.append(el('span', null, text));
+    return p;
+  };
+
+  /* 이미 마크업에 있는 요소의 내용을 같은 방식으로 감싼다 (제목, 날짜) */
+  const maskify = (node) => {
+    const inner = el('span');
+    inner.append(...node.childNodes);
+    const win = el('span', 'rv-l');
+    win.append(inner);
+    node.append(win);
+  };
+
   /* ---- 변형 스위처 ---------------------------------------------------- */
   const params = new URLSearchParams(location.search);
   const THEMES = ['batang', 'gothic', 'poster'];
@@ -49,7 +77,8 @@
     const arr = get(node.dataset.lines);
     if (!Array.isArray(arr)) continue;
     if (!arr.length && node.hasAttribute('data-optional')) { node.remove(); continue; }
-    node.replaceChildren(...arr.map((t) => el('p', null, t)));
+    node.replaceChildren(...arr.map(maskLine));
+    stagger($$('.rv-l', node));
   }
   /* 내용이 없는 섹션은 통째로 숨긴다 */
   for (const node of $$('[data-hide-if-empty]')) {
@@ -74,6 +103,7 @@
       row.append(meta, el('span', 'names__name', who.name));
       namesRoot.append(row);
     }
+    stagger($$('.names__row', namesRoot));
   }
 
   /* ---- 날짜 표기 ------------------------------------------------------ */
@@ -84,6 +114,25 @@
   if (sub) sub.textContent = `${D.weekdayKo} ${D.timeKo}`;
   const time = $('time[data-date-iso]');
   if (time) time.setAttribute('datetime', D.iso);
+
+  /* 예식일 하트. 배경 이미지가 아니라 인라인 SVG 여야 획을 그릴 수 있다.
+     --len 에 실제 경로 길이를 넣어 dasharray 로 한 번에 그려낸다. */
+  const NS = 'http://www.w3.org/2000/svg';
+  function heart() {
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'cal__heart');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', 'M12 20.5s-7.5-4.6-7.5-10A4 4 0 0 1 12 8.2a4 4 0 0 1 7.5 2.3c0 5.4-7.5 10-7.5 10z');
+    svg.append(path);
+    // getTotalLength() 는 문서에 붙은 뒤라야 정확하다
+    requestAnimationFrame(() => {
+      const len = Math.ceil(path.getTotalLength()) || 60;
+      path.style.setProperty('--len', len);
+    });
+    return svg;
+  }
 
   /* ---- 달력 ---------------------------------------------------------- */
   const grid = $('[data-cal]');
@@ -97,11 +146,15 @@
     while (cells.length % 7) cells.push(null);
     cells.forEach((d, i) => {
       const c = el('span', 'cal__cell');
+      c.style.setProperty('--i', i);
       if (d == null) { c.classList.add('cal__cell--out'); c.setAttribute('aria-hidden', 'true'); }
       else {
         c.textContent = d;
-        if (d === D.day) { c.classList.add('cal__cell--day'); c.setAttribute('aria-current', 'date'); }
-        else if (i % 7 === 0) c.classList.add('cal__cell--sun');
+        if (d === D.day) {
+          c.classList.add('cal__cell--day');
+          c.setAttribute('aria-current', 'date');
+          c.prepend(heart());
+        } else if (i % 7 === 0) c.classList.add('cal__cell--sun');
       }
       grid.append(c);
     });
@@ -114,14 +167,28 @@
     m: $('[data-count="m"]'), s: $('[data-count="s"]'),
   };
   const dday = $('[data-dday]');
+
+  /* 값이 실제로 바뀐 자리만 움직인다. 매초 네 자리가 다 흔들리면 읽을 수 없다. */
+  const roll = (node, v) => {
+    if (!node) return;
+    const next = String(v);
+    if (node.textContent === next) return;
+    node.textContent = next;
+    if (!MOTION || !node.animate) return;
+    node.animate(
+      [{ transform: 'translateY(-0.3em)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+      { duration: 320, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+    );
+  };
+
   function tick() {
     const ms = target - Date.now();
     const s = Math.max(0, Math.floor(ms / 1000));
     const dd = Math.floor(s / 86400);
-    if (nums.d) nums.d.textContent = dd;
-    if (nums.h) nums.h.textContent = pad(Math.floor((s % 86400) / 3600));
-    if (nums.m) nums.m.textContent = pad(Math.floor((s % 3600) / 60));
-    if (nums.s) nums.s.textContent = pad(s % 60);
+    roll(nums.d, dd);
+    roll(nums.h, pad(Math.floor((s % 86400) / 3600)));
+    roll(nums.m, pad(Math.floor((s % 3600) / 60)));
+    roll(nums.s, pad(s % 60));
     if (dday) {
       // 달력상 남은 '일' — 자정 기준으로 올림
       const daysLeft = Math.ceil(ms / 86400000);
@@ -260,6 +327,15 @@
       return card;
     }));
     for (const t of tabs) t.setAttribute('aria-selected', String(t.dataset.side === side));
+    if (!MOTION) return;
+    for (const card of acctRoot.children) {
+      if (card.animate) {
+        card.animate(
+          [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+        );
+      }
+    }
   };
   for (const t of tabs) t.addEventListener('click', () => renderAcct(t.dataset.side));
   renderAcct('groom');
@@ -273,13 +349,45 @@
   });
 
   /* ---- 스크롤 진입 ----------------------------------------------------- */
+  /* 바인딩이 끝난 지금 감싼다. 먼저 감싸면 textContent 가 창을 지워 버린다. */
+  $$('[data-reveal="mask"]').forEach(maskify);
+
   const reveals = $$('[data-reveal]');
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+
+  /* 첫 화면은 관측이 아니라 순서다 — 문장, 이름이 차례로 들어오며 시작한다. */
+  const hero = $$('.hero [data-reveal]');
+  hero.forEach((n, i) => n.style.setProperty('--m-delay', 220 + i * 260 + 'ms'));
+
+  if (!MOTION) {
     reveals.forEach((r) => r.classList.add('is-in'));
   } else {
-    const io = new IntersectionObserver((es) => {
-      for (const e of es) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
-    reveals.forEach((r) => io.observe(r));
+    /* IntersectionObserver 를 쓰지 않는다. 목차를 눌러 한 번에 아래로 뛰면
+       건너뛴 요소는 교차 상태가 바뀌지 않아 영영 안 보인 채로 남는다.
+       화면 위로 이미 지나간 것도 '보여준 것'으로 쳐야 한다 —
+       기준은 하나: 위쪽 모서리가 화면 88% 선보다 위에 있으면 보여준다. */
+    const pending = new Set(reveals);
+    let queued = false;
+    const sweep = () => {
+      queued = false;
+      const line = window.innerHeight * 0.88;
+      for (const n of pending) {
+        if (n.getBoundingClientRect().top < line) {
+          n.classList.add('is-in');
+          pending.delete(n);
+        }
+      }
+      if (!pending.size) {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      }
+    };
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(sweep);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
   }
 })();

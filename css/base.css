@@ -199,16 +199,8 @@ a { color: inherit; text-decoration: none; }
   font-weight: 500;
 }
 /* 예식일: 하트 아웃라인 — 인쇄된 Save the Date 카드와 같은 표기.
-   채운 원보다 숫자 가독성이 좋고, 유채색 없이 '결혼'을 말한다. */
-.cal__cell--day::before {
-  content: '';
-  position: absolute;
-  width: 2.875rem; height: 2.875rem;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -54%);
-  z-index: -1;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20.5s-7.5-4.6-7.5-10A4 4 0 0 1 12 8.2a4 4 0 0 1 7.5 2.3c0 5.4-7.5 10-7.5 10z' fill='none' stroke='%23111' stroke-width='1.1' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-}
+   채운 원보다 숫자 가독성이 좋고, 유채색 없이 '결혼'을 말한다.
+   도형 자체는 JS 가 인라인 SVG 로 넣는다 (획을 그릴 수 있어야 해서). */
 
 .count {
   margin-top: 2rem;
@@ -274,7 +266,7 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid var(--ink);
   font-size: 0.875rem;
   letter-spacing: 0;
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), transform 160ms var(--ease);
 }
 .btn:hover { background: var(--ink); color: var(--paper); }
 .btn--full { width: 100%; margin-top: 0.75rem; }
@@ -388,7 +380,7 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
   background: var(--fill);
   border-bottom: 2px solid transparent;
-  transition: border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease), opacity var(--dur) var(--ease), transform 160ms var(--ease);
   opacity: 0.55;
 }
 .gal__thumb img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
@@ -418,7 +410,7 @@ a { color: inherit; text-decoration: none; }
   border-radius: 999px;
   font-size: 0.875rem;
   color: var(--ink-2);
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), transform 160ms var(--ease);
 }
 .tab[aria-selected='true'] { background: var(--ink); color: var(--paper); }
 
@@ -446,7 +438,7 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid var(--rule);
   font-size: var(--fs-meta);
   color: var(--ink-2);
-  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease), transform 160ms var(--ease);
 }
 .acct__copy:hover, .acct__copy[data-done='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
@@ -468,21 +460,7 @@ a { color: inherit; text-decoration: none; }
 }
 .foot .btn { margin-top: 1.5rem; }
 
-/* ==========================================================================
-   스크롤 진입
-   ========================================================================== */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 620ms var(--ease), transform 620ms var(--ease);
-}
-[data-reveal].is-in { opacity: 1; transform: none; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
-  [data-reveal] { opacity: 1; transform: none; }
-  .gal__track { scroll-behavior: auto; }
-}
+/* 스크롤 진입 · 모션은 전부 css/motion.css 에 있다. */
 
 /* ==========================================================================
    변형 스위처 (?lab 일 때만 보인다)
