@@ -44,15 +44,16 @@
    문장 — 한 줄씩 아래에서 밀려 올라온다
    .rv-l 은 창, 그 안의 span 이 올라온다. line-height 1.85 덕에 잘리지 않는다.
    -------------------------------------------------------------------------- */
-/* 창을 글줄보다 위아래로 조금 키우고 그만큼 음수 마진으로 되돌린다.
-   line-height 가 1 인 큰 숫자에서 Cormorant 의 '5' 꼬리가 잘리던 문제.
-   자리는 그대로 두면서 잉크가 넘칠 자리만 벌어 준다. */
-.rv-l {
-  /* 인라인이면 overflow 도 세로 패딩도 먹지 않는다. 창은 반드시 블록이어야 한다. */
-  display: block;
-  overflow: hidden;
-  padding-block: 0.18em;
-  margin-block: -0.18em;
+/* 인라인이면 overflow 도 세로 패딩도 먹지 않는다. 창은 반드시 블록이어야 한다. */
+.rv-l { display: block; overflow: hidden; }
+
+/* 제목·날짜는 line-height 가 1 이라 Cormorant 의 '5' 꼬리가 창에 잘린다.
+   위아래로 조금 키우고 같은 만큼 음수 마진으로 되돌려 자리는 그대로 둔다.
+   본문 줄에는 걸지 않는다 — 줄끼리 붙어 있어 마진이 합쳐지지 않고
+   한쪽만 상쇄돼 결과적으로 줄 간격이 벌어진다. */
+:root.js [data-reveal='mask'] .rv-l {
+  padding-block: 0.2em;
+  margin-block: -0.2em;
 }
 :root.js [data-reveal='lines'] .rv-l > span,
 :root.js [data-reveal='mask'] .rv-l > span {
