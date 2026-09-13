@@ -149,11 +149,17 @@
   }
   const sketch = $('[data-sketch]');
   if (sketch) {
-    if (V.sketchImage) sketch.href = V.sketchImage;
-    else sketch.remove();
+    if (V.sketch?.src) {
+      sketch.src = V.sketch.src;
+      // width/height 를 주면 이미지가 늦게 와도 자리가 미리 잡혀 레이아웃이 안 밀린다
+      if (V.sketch.w) sketch.width = V.sketch.w;
+      if (V.sketch.h) sketch.height = V.sketch.h;
+      sketch.loading = 'lazy';
+      sketch.decoding = 'async';
+    } else {
+      sketch.closest('.map')?.remove();
+    }
   }
-  const mapLink = $('[data-map-link]');
-  if (mapLink && V.links?.naver) mapLink.href = V.links.naver;
 
   /* ---- 교통 ---------------------------------------------------------- */
   const T = W.transit;
@@ -169,6 +175,10 @@
   }));
   const shuttle = $('[data-shuttle]');
   if (shuttle) shuttle.replaceChildren(...(T.shuttle || []).map((t) => el('p', null, t)));
+  const car = $('[data-car]');
+  if (car) car.replaceChildren(...(T.car || []).map((c) => {
+    const li = el('li'); li.append(el('span', 'transit__tag', c.kind), el('span', null, c.text)); return li;
+  }));
 
   /* ---- 안내사항 -------------------------------------------------------- */
   const info = $('[data-info]');

@@ -49,7 +49,8 @@ window.WEDDING = {
       kakao: 'https://map.kakao.com/link/search/오펠리스웨딩컨벤션',
       tmap: 'tmap://search?name=오펠리스웨딩컨벤션',
     },
-    sketchImage: null, // TODO: 약도 이미지 (인쇄본 약도를 스캔하면 여기)
+    // 인쇄 청첩장의 약도. w/h 를 함께 두어 로딩 중 레이아웃이 밀리지 않게 한다.
+    sketch: { src: 'images/map-sketch.png', w: 1180, h: 840 },
   },
 
   transit: {
@@ -63,10 +64,10 @@ window.WEDDING = {
       { kind: '삼성본관앞', text: '[02131] 하차 · 406, 500, 504, 603, 7011, 종로09' },
     ],
     shuttle: [],
+    // 버스와 같은 태그+본문 구조. 문장으로 두면 390px 에서 어색하게 접힌다.
     car: [
-      '내비게이션에 "오펠리스웨딩컨벤션" 또는 "퍼시픽타워"',
-      '또는 "세종대로9길 41" 입력',
-      '3시간 무료주차 가능',
+      { kind: '내비 검색', text: '오펠리스웨딩컨벤션 · 퍼시픽타워 · 세종대로9길 41' },
+      { kind: '주차', text: '3시간 무료' },
     ],
   },
 
