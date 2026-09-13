@@ -40,13 +40,21 @@
   const get = (path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), W);
   for (const node of $$('[data-bind]')) {
     const v = get(node.dataset.bind);
+    // data-optional: 값이 비어 있으면 요소 자체를 없앤다 (빈 슬롯이 여백으로 남지 않게)
+    if (!v && node.hasAttribute('data-optional')) { node.remove(); continue; }
     if (v != null) node.textContent = v;
   }
   /* 줄 배열 → <p> 여러 개 */
   for (const node of $$('[data-lines]')) {
     const arr = get(node.dataset.lines);
     if (!Array.isArray(arr)) continue;
+    if (!arr.length && node.hasAttribute('data-optional')) { node.remove(); continue; }
     node.replaceChildren(...arr.map((t) => el('p', null, t)));
+  }
+  /* 내용이 없는 섹션은 통째로 숨긴다 */
+  for (const node of $$('[data-hide-if-empty]')) {
+    const v = get(node.dataset.hideIfEmpty);
+    if (!v || (Array.isArray(v) && !v.length)) node.remove();
   }
 
   /* ---- 이름 · 혼주 ---------------------------------------------------- */

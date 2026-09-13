@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="ko" data-theme="batang">
+<html lang="ko" data-theme="gothic">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>김진호 · 이나은 결혼합니다</title>
-  <meta name="description" content="2026년 10월 24일 토요일 낮 12시 30분, 더채플앳청담 커티지홀" />
+  <title>박동삼 · 김연의 결혼합니다</title>
+  <meta name="description" content="2026년 10월 25일 일요일 오후 1시 40분 · 오펠리스 웨딩컨벤션 라비제홀" />
   <meta name="theme-color" content="#ffffff" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="김진호 · 이나은 결혼합니다" />
-  <meta property="og:description" content="2026년 10월 24일 토요일 낮 12시 30분, 더채플앳청담 커티지홀" />
+  <meta property="og:title" content="박동삼 · 김연의 결혼합니다" />
+  <meta property="og:description" content="2026년 10월 25일 일요일 오후 1시 40분 · 오펠리스 웨딩컨벤션 라비제홀" />
   <meta property="og:url" content="https://parkdongsam.github.io/" />
   <meta property="og:image" content="https://parkdongsam.github.io/images/og.png" />
   <meta property="og:image:width" content="1200" />
@@ -32,9 +32,10 @@
     <!-- ============================ INVITATION ============================ -->
     <section class="sec hero" aria-labelledby="h-inv">
       <p class="label" id="h-inv">Invitation</p>
+      <h1 class="title" data-bind="headline"></h1>
 
-      <blockquote class="quote" data-lines="quote.lines"></blockquote>
-      <p class="quote__src" data-bind="quote.source"></p>
+      <blockquote class="quote" data-lines="quote.lines" data-optional></blockquote>
+      <p class="quote__src" data-bind="quote.source" data-optional></p>
 
       <div class="invite" data-lines="invitation" data-reveal></div>
 
@@ -44,9 +45,9 @@
     <!-- =============================== DATE =============================== -->
     <section class="sec" aria-labelledby="h-date">
       <p class="label" id="h-date">Date</p>
-      <h1 class="date__big" data-reveal>
+      <h2 class="date__big" data-reveal>
         <time data-date-iso data-date-big></time>
-      </h1>
+      </h2>
       <p class="date__sub" data-date-sub data-reveal></p>
 
       <div class="cal" data-reveal>
@@ -101,11 +102,15 @@
           <ul class="transit__list" data-bus></ul>
           <div class="transit__note" data-shuttle></div>
         </div>
+        <div class="transit__block" data-reveal>
+          <p class="sub">자가용</p>
+          <div class="transit__lines" data-lines="transit.car"></div>
+        </div>
       </div>
     </section>
 
     <!-- =========================== INFORMATION ============================ -->
-    <section class="sec" aria-labelledby="h-info">
+    <section class="sec" aria-labelledby="h-info" data-hide-if-empty="info">
       <p class="label" id="h-info">Information</p>
       <h2 class="title">예식정보 및 안내사항</h2>
       <div class="info" data-info data-reveal></div>

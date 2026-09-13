@@ -1,95 +1,83 @@
 /*
  * 청첩장 내용 — 바꿀 것은 전부 이 파일에만 있다.
- * 이름·날짜·장소·계좌·사진 경로. 마크업과 스타일은 건드리지 않아도 된다.
+ * 출처: 인쇄 청첩장 원고 (2026-09-13 확인). TODO 만 미확정.
  */
 window.WEDDING = {
   groom: {
-    name: '김진호',
-    short: '진호',
-    parents: ['김건호', '이미자'],
+    name: '박동삼',
+    short: '동삼',
+    parents: ['박종만', '신용선'],
     relation: '아들',
   },
   bride: {
-    name: '이나은',
-    short: '나은',
-    parents: ['이주명', '유수지'],
+    name: '김연의',
+    short: '연의',
+    parents: ['김성식', '조미선'],
     relation: '딸',
   },
 
   date: {
-    // KST. 요일은 검증 완료 (2026-10-24 = 토요일).
-    iso: '2026-10-24T12:30:00+09:00',
+    // KST. 요일 검증 완료 (2026-10-25 = 일요일). 인쇄본과 일치.
+    iso: '2026-10-25T13:40:00+09:00',
     year: 2026,
     month: 10,
-    day: 24,
-    weekdayKo: '토요일',
-    timeKo: '낮 12시 30분',
+    day: 25,
+    weekdayKo: '일요일',
+    timeKo: '오후 1시 40분',
   },
 
-  quote: {
-    lines: [
-      '저절로 웃음이 났다.',
-      '웃는 남자를 보고 여자도 웃었다.',
-      '마음에 꽃이 피는 것 같았다.',
-      '정말로 봄이었다.',
-    ],
-    source: '정현주 〈다시, 사랑〉 중에서',
-  },
+  headline: '저희 결혼합니다',
+
+  // 인용문. 비워두면(lines: []) 블록이 숨겨진다.
+  quote: { lines: [], source: '' },
 
   invitation: [
-    '둘이 함께 맞이하는 3번째 봄,',
-    '저희 두 사람 결혼합니다.',
-    '앞으로 맞이할 저희의 봄날을 축복해주세요.',
+    '서로 다른 길을 걸어온 두 사람이',
+    '이제 두 손을 꼭 잡고 함께 걸어가려 합니다.',
+    '저희의 새로운 시작을',
+    '따뜻한 마음으로 축복해 주세요.',
   ],
 
   venue: {
-    name: '더채플앳청담 커티지홀',
-    floor: '3층',
-    address: '서울 강남구 선릉로 757',
-    tel: '02-000-0000',
-    // 지도 앱 검색어. 좌표가 확정되면 아래 links 를 좌표 링크로 바꾸면 된다.
-    query: '더채플앳청담',
+    name: '오펠리스 웨딩컨벤션',
+    floor: '20층 라비제홀',
+    address: '서울시 중구 세종대로9길 41 퍼시픽타워 20층',
+    tel: '02-2130-2300',
+    query: '오펠리스웨딩컨벤션',
     links: {
-      naver: 'https://map.naver.com/p/search/더채플앳청담',
-      kakao: 'https://map.kakao.com/link/search/더채플앳청담',
-      tmap: 'tmap://search?name=더채플앳청담',
+      naver: 'https://map.naver.com/p/search/오펠리스웨딩컨벤션',
+      kakao: 'https://map.kakao.com/link/search/오펠리스웨딩컨벤션',
+      tmap: 'tmap://search?name=오펠리스웨딩컨벤션',
     },
-    // 약도 이미지가 준비되면 경로를 넣는다. null 이면 버튼이 숨겨진다.
-    sketchImage: null,
+    sketchImage: null, // TODO: 약도 이미지 (인쇄본 약도를 스캔하면 여기)
   },
 
   transit: {
     subway: [
-      { line: '7호선', text: '강남구청역 3-1번 출구' },
-      { line: '분당선', text: '강남구청역 3-1번 출구' },
+      { line: '1, 2호선', text: '시청역 9번 출구 (도보 4분)' },
+      { line: '1, 4호선', text: '서울역 3번 출구 (도보 10분)' },
     ],
-    subwayNote: '좌측 방향 570M 도보 후 좌측 건물',
+    subwayNote: '',
     bus: [
-      { kind: '간선버스', text: '301, 342, 472' },
-      { kind: '지선버스', text: '3011, 4312' },
+      { kind: '신한은행본점', text: '[02233] 하차 · 703, 790, 799, 1000, 1200' },
+      { kind: '삼성본관앞', text: '[02131] 하차 · 406, 500, 504, 603, 7011, 종로09' },
     ],
-    shuttle: ['셔틀버스 수시 운행', '강남구청역(7호선, 분당선) 3번 출구 앞'],
+    shuttle: [],
+    car: [
+      '내비게이션에 "오펠리스웨딩컨벤션" 또는 "퍼시픽타워"',
+      '또는 "세종대로9길 41" 입력',
+      '3시간 무료주차 가능',
+    ],
   },
 
-  info: [
-    {
-      title: '포토부스 이용안내',
-      body: [
-        '포토부스가 설치될 예정입니다.',
-        '귀한 발걸음 해주신 여러분의',
-        '환한 미소와 따뜻한 말씀 남겨주시면',
-        '소중히 간직하도록 하겠습니다.',
-      ],
-    },
-  ],
+  // 안내사항. 비워두면 섹션이 숨겨진다. TODO: 확정 후 채움.
+  info: [],
 
-  // 사진이 준비되면 경로만 교체. 세로 3:4 권장.
+  // TODO: 실제 사진. 세로 3:4 권장. 경로만 교체.
   gallery: [
     'images/ph-1.svg',
     'images/ph-2.svg',
     'images/ph-3.svg',
-    'images/ph-4.svg',
-    'images/ph-5.svg',
   ],
 
   accountNote: [
@@ -97,12 +85,13 @@ window.WEDDING = {
     '계좌번호를 기재하였습니다.',
     '너그러운 마음으로 양해 부탁드립니다.',
   ],
+  // TODO: 실제 계좌
   accounts: {
     groom: [
-      { holder: '김진호', bank: '신한은행', number: '110-000-000000', kakaopay: null },
+      { holder: '박동삼', bank: '은행', number: '000-000-000000', kakaopay: null },
     ],
     bride: [
-      { holder: '이나은', bank: '국민은행', number: '000000-00-000000', kakaopay: null },
+      { holder: '김연의', bank: '은행', number: '000-000-000000', kakaopay: null },
     ],
   },
 };

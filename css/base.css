@@ -1,12 +1,12 @@
 /* ==========================================================================
    토큰 — 흰 종이, 검은 잉크. 유채색 없음.
-   간격은 4px 그리드. 타입 스케일은 고정값.
+   간격은 4px 그리드. 가독성 우선: 본문 16px, 회색은 대비 확보한 값만.
    ========================================================================== */
 :root {
   --paper: #ffffff;
   --ink: #111111;
-  --ink-2: #555555;
-  --ink-3: #9a9a9a;
+  --ink-2: #444444;   /* 본문 보조 — #555 는 흰 배경에서 가독성 부족 */
+  --ink-3: #8c8c8c;   /* 라벨·메타 — 정보 전달용 텍스트에는 쓰지 않는다 */
   --rule: #e6e6e6;
   --fill: #f4f4f4;
 
@@ -17,19 +17,20 @@
 
   --fs-label: 0.6875rem;   /* 11 */
   --fs-meta: 0.8125rem;    /* 13 */
-  --fs-body: 0.9375rem;    /* 15 */
+  --fs-body: 1rem;         /* 16 */
   --fs-title: 1.25rem;     /* 20 */
   --fs-quote: 1.0625rem;   /* 17 */
   --fs-name: 1.75rem;      /* 28 */
   --fs-date: 2.5rem;       /* 40 */
   --fs-count: 1.75rem;     /* 28 */
 
-  --lh-body: 1.9;
+  --lh-body: 1.85;
   --ls-label: 0.24em;
 
   --col: 30rem;            /* 480 */
   --gutter: 1.5rem;        /* 24 */
-  --sec: 6rem;             /* 96 */
+  --sec: 4rem;             /* 64 — 섹션 간 여백 */
+  --gap: 1.75rem;          /* 28 — 섹션 안 블록 간 여백 */
 
   --dur: 240ms;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -87,13 +88,13 @@ a { color: inherit; text-decoration: none; }
   font-weight: 400;
 }
 .title {
-  margin-top: 0.75rem;
+  margin-top: 0.625rem;
   font-size: var(--fs-title);
   font-weight: 400;
   letter-spacing: -0.02em;
 }
 .lead {
-  margin-top: 2.5rem;
+  margin-top: var(--gap);
   color: var(--ink-2);
 }
 .lead p + p { margin-top: 0; }
@@ -101,30 +102,30 @@ a { color: inherit; text-decoration: none; }
 /* ==========================================================================
    INVITATION
    ========================================================================== */
-.hero { padding-top: 7rem; }
+.hero { padding-top: 4.5rem; }
 .quote {
-  margin-top: 3rem;
+  margin-top: 2rem;
   font-family: var(--font-display);
   font-size: var(--fs-quote);
-  line-height: 2.1;
+  line-height: 2;
   color: var(--ink);
 }
 .quote__src {
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   font-size: var(--fs-meta);
   color: var(--ink-3);
   font-family: var(--font-body);
 }
 .invite {
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
   color: var(--ink-2);
 }
 
 /* 이름 · 혼주 */
 .names {
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.625rem;
   font-size: var(--fs-body);
   color: var(--ink-2);
 }
@@ -159,14 +160,14 @@ a { color: inherit; text-decoration: none; }
   font-variant-numeric: tabular-nums;
 }
 .date__sub {
-  margin-top: 0.875rem;
+  margin-top: 0.75rem;
   color: var(--ink-2);
 }
 
 .cal {
-  margin: 3rem auto 0;
+  margin: 2rem auto 0;
   max-width: 20rem;
-  padding: 1.5rem 0;
+  padding: 1.25rem 0;
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
 }
@@ -178,7 +179,7 @@ a { color: inherit; text-decoration: none; }
 .cal__head {
   font-size: var(--fs-meta);
   color: var(--ink-3);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 .cal__head span:first-child { color: var(--ink-2); }
 .cal__cell {
@@ -193,22 +194,24 @@ a { color: inherit; text-decoration: none; }
 .cal__cell--sun { color: var(--ink-3); }
 .cal__cell--day {
   position: relative;
-  color: var(--paper);
+  isolation: isolate;
+  color: var(--ink);
   font-weight: 500;
 }
-/* 예식일: 검은 원. 유채색을 쓰지 않는다. */
+/* 예식일: 하트 아웃라인 — 인쇄된 Save the Date 카드와 같은 표기.
+   채운 원보다 숫자 가독성이 좋고, 유채색 없이 '결혼'을 말한다. */
 .cal__cell--day::before {
   content: '';
   position: absolute;
-  width: 2rem; height: 2rem;
-  border-radius: 50%;
-  background: var(--ink);
+  width: 2.875rem; height: 2.875rem;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -54%);
   z-index: -1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20.5s-7.5-4.6-7.5-10A4 4 0 0 1 12 8.2a4 4 0 0 1 7.5 2.3c0 5.4-7.5 10-7.5 10z' fill='none' stroke='%23111' stroke-width='1.1' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
-.cal__cell--day { isolation: isolate; }
 
 .count {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -241,7 +244,7 @@ a { color: inherit; text-decoration: none; }
   padding-top: 1.1rem;
 }
 .dday {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   color: var(--ink-2);
 }
 .dday b { font-weight: 500; color: var(--ink); }
@@ -250,15 +253,15 @@ a { color: inherit; text-decoration: none; }
    LOCATION
    ========================================================================== */
 .venue__name {
-  margin-top: 2.5rem;
+  margin-top: var(--gap);
   font-size: var(--fs-title);
   font-weight: 400;
 }
-.venue__addr { margin-top: 0.5rem; color: var(--ink-2); }
-.venue__tel  { margin-top: 0.25rem; color: var(--ink-3); font-size: var(--fs-meta); }
+.venue__addr { margin-top: 0.375rem; color: var(--ink-2); }
+.venue__tel  { margin-top: 0.125rem; color: var(--ink-2); font-size: var(--fs-meta); }
 
 .map {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   aspect-ratio: 4 / 3;
   background: var(--fill);
   border: 1px solid var(--rule);
@@ -290,7 +293,7 @@ a { color: inherit; text-decoration: none; }
 .btn[data-done='true'] { background: var(--ink); color: var(--paper); }
 
 .nav {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   text-align: left;
 }
 .sub {
@@ -300,7 +303,7 @@ a { color: inherit; text-decoration: none; }
 }
 .sub + p { margin-top: 0.25rem; color: var(--ink-2); font-size: var(--fs-meta); }
 .nav__apps {
-  margin-top: 1rem;
+  margin-top: 0.875rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
@@ -308,28 +311,30 @@ a { color: inherit; text-decoration: none; }
 .nav__apps .btn { padding: 0 0.5rem; }
 
 .transit {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   text-align: left;
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
 }
-.transit__block { padding-top: 1.5rem; border-top: 1px solid var(--rule); }
-.transit__list { margin-top: 0.75rem; display: grid; gap: 0.375rem; color: var(--ink-2); }
+.transit__block { padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+.transit__list { margin-top: 0.625rem; display: grid; gap: 0.25rem; color: var(--ink-2); }
 .transit__list li { display: flex; gap: 0.75rem; }
 .transit__tag {
-  flex: 0 0 4.25rem;
+  flex: 0 0 5.75rem;
   color: var(--ink-3);
   font-size: var(--fs-meta);
   letter-spacing: 0.02em;
-  padding-top: 0.1em;
+  padding-top: 0.15em;
 }
-.transit__note { margin-top: 0.75rem; color: var(--ink-3); font-size: var(--fs-meta); }
+.transit__note { margin-top: 0.625rem; color: var(--ink-2); font-size: var(--fs-meta); }
+.transit__note:empty { display: none; }
+.transit__lines { margin-top: 0.625rem; color: var(--ink-2); }
 
 /* ==========================================================================
    INFORMATION
    ========================================================================== */
-.info { margin-top: 2.5rem; display: grid; gap: 2.5rem; }
-.info__card { display: grid; gap: 1rem; }
+.info { margin-top: var(--gap); display: grid; gap: 2rem; }
+.info__card { display: grid; gap: 0.875rem; }
 .info__img {
   aspect-ratio: 3 / 2;
   background: var(--fill);
@@ -339,9 +344,9 @@ a { color: inherit; text-decoration: none; }
 .info__body { color: var(--ink-2); }
 
 /* ==========================================================================
-   GALLERY — 확대 불가 슬라이드. 라이트박스 없음.
+   GALLERY — 확대 불가 슬라이드. 라이트박스 없음. 사진은 세로 3:4.
    ========================================================================== */
-.gal { margin-top: 2.5rem; }
+.gal { margin-top: var(--gap); }
 .gal__stage { position: relative; }
 .gal__track {
   display: flex;
@@ -350,7 +355,6 @@ a { color: inherit; text-decoration: none; }
   scroll-behavior: smooth;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  /* 세로 스크롤은 페이지에, 가로만 트랙이 가진다 */
   touch-action: pan-x pan-y;
 }
 .gal__track::-webkit-scrollbar { display: none; }
@@ -386,11 +390,11 @@ a { color: inherit; text-decoration: none; }
 .gal__thumbs {
   margin-top: 0.5rem;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
   gap: 0.375rem;
 }
 .gal__thumb {
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: var(--fill);
   border-bottom: 2px solid transparent;
@@ -400,7 +404,7 @@ a { color: inherit; text-decoration: none; }
 .gal__thumb img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .gal__thumb[aria-current='true'] { border-color: var(--ink); opacity: 1; }
 .gal__count {
-  margin-top: 0.75rem;
+  margin-top: 0.625rem;
   font-family: var(--font-num);
   font-size: var(--fs-meta);
   color: var(--ink-3);
@@ -412,7 +416,7 @@ a { color: inherit; text-decoration: none; }
    ACCOUNT
    ========================================================================== */
 .tabs {
-  margin: 2.5rem auto 0;
+  margin: var(--gap) auto 0;
   display: inline-flex;
   border: 1px solid var(--rule);
   border-radius: 999px;
@@ -423,17 +427,17 @@ a { color: inherit; text-decoration: none; }
   padding: 0 1.5rem;
   border-radius: 999px;
   font-size: 0.875rem;
-  color: var(--ink-3);
+  color: var(--ink-2);
   transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 .tab[aria-selected='true'] { background: var(--ink); color: var(--paper); }
 
-.acct { margin-top: 1.5rem; display: grid; gap: 0.75rem; }
+.acct { margin-top: 1.25rem; display: grid; gap: 0.75rem; }
 .acct__card {
   border: 1px solid var(--rule);
-  padding: 1.5rem 1.25rem;
+  padding: 1.25rem;
   display: grid;
-  gap: 1rem;
+  gap: 0.875rem;
   text-align: center;
 }
 .acct__holder { font-size: var(--fs-body); }
@@ -460,7 +464,7 @@ a { color: inherit; text-decoration: none; }
    FOOTER
    ========================================================================== */
 .foot {
-  padding: var(--sec) 0 5rem;
+  padding: var(--sec) 0 4rem;
   text-align: center;
   border-top: 1px solid var(--rule);
 }
@@ -472,7 +476,7 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: var(--ls-label);
   color: var(--ink-3);
 }
-.foot .btn { margin-top: 2rem; }
+.foot .btn { margin-top: 1.5rem; }
 
 /* ==========================================================================
    스크롤 진입
