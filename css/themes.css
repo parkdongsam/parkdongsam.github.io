@@ -1,0 +1,68 @@
+/* ==========================================================================
+   변형 3종. 마크업은 하나, [data-theme] 만 바뀐다.
+   A batang — 명조 · 중앙 정렬 · 헤어라인 (기본)
+   B gothic — 고딕 · 좌측 정렬 · 스위스 그리드 · 타뷸러 숫자
+   C poster — 명조 · 대형 디스플레이 · 괘선 없음 · 여백 극대
+   ========================================================================== */
+
+/* --- B gothic --------------------------------------------------------- */
+[data-theme='gothic'] {
+  --font-display: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+  --font-label: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+  --font-num: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+  --ls-label: 0.2em;
+  --fs-date: 3rem;
+  --fs-count: 2rem;
+}
+[data-theme='gothic'] .sec,
+[data-theme='gothic'] .foot { text-align: left; }
+[data-theme='gothic'] .label { font-weight: 500; color: var(--ink); }
+[data-theme='gothic'] .title { font-weight: 500; letter-spacing: -0.03em; }
+[data-theme='gothic'] .quote { font-size: 1.125rem; line-height: 1.9; letter-spacing: -0.02em; }
+[data-theme='gothic'] .names__row { justify-content: flex-start; }
+[data-theme='gothic'] .names__name { font-weight: 600; letter-spacing: -0.02em; }
+[data-theme='gothic'] .date__big { font-weight: 600; letter-spacing: -0.04em; }
+[data-theme='gothic'] .cal { margin-left: 0; max-width: 100%; }
+[data-theme='gothic'] .count { justify-content: flex-start; }
+[data-theme='gothic'] .count__num { font-weight: 600; letter-spacing: -0.03em; }
+[data-theme='gothic'] .count__label { font-weight: 500; }
+[data-theme='gothic'] .tabs { margin-left: 0; border-radius: 0; }
+[data-theme='gothic'] .tab { border-radius: 0; }
+[data-theme='gothic'] .acct__card { text-align: left; }
+[data-theme='gothic'] .acct__line { justify-content: flex-start; }
+[data-theme='gothic'] .btn { border-radius: 0; }
+/* 섹션 라벨을 괘선 위에 얹는다 — 스위스 편집 그리드 */
+[data-theme='gothic'] .sec + .sec { padding-top: calc(var(--sec) - 1.5rem); }
+[data-theme='gothic'] .sec + .sec .label {
+  display: inline-block;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ink);
+  margin-top: -1px;
+}
+
+/* --- C poster --------------------------------------------------------- */
+[data-theme='poster'] {
+  --fs-name: 2.75rem;
+  --fs-date: 3.75rem;
+  --fs-quote: 1.1875rem;
+  --fs-title: 1.375rem;
+  --fs-count: 2.25rem;
+  --sec: 8rem;
+}
+[data-theme='poster'] .sec + .sec { border-top: 0; }
+[data-theme='poster'] .label::after {
+  content: '';
+  display: block;
+  width: 1px; height: 1.5rem;
+  background: var(--ink-3);
+  margin: 1rem auto 0;
+}
+[data-theme='poster'] .title { margin-top: 1.25rem; }
+[data-theme='poster'] .quote { line-height: 2.2; }
+[data-theme='poster'] .names { gap: 1.25rem; margin-top: 4.5rem; }
+[data-theme='poster'] .names__row { flex-direction: column; align-items: center; gap: 0.25rem; }
+[data-theme='poster'] .names__name { font-size: var(--fs-name); line-height: 1.1; margin-top: 0.25rem; }
+[data-theme='poster'] .date__big { font-weight: 300; letter-spacing: 0.04em; }
+[data-theme='poster'] .cal { border: 0; padding: 0; margin-top: 3.5rem; }
+[data-theme='poster'] .count { gap: 0.5rem; }
+[data-theme='poster'] .foot { border-top: 0; }

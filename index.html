@@ -1,238 +1,164 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!doctype html>
+<html lang="ko" data-theme="batang">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PARK DongSam - System Engineer">
-    <title>PARK DongSam</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>김진호 · 이나은 결혼합니다</title>
+  <meta name="description" content="2026년 10월 24일 토요일 낮 12시 30분, 더채플앳청담 커티지홀" />
+  <meta name="theme-color" content="#ffffff" />
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #fff;
-            color: #000;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 2rem 4rem;
-            line-height: 1.8;
-        }
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="김진호 · 이나은 결혼합니다" />
+  <meta property="og:description" content="2026년 10월 24일 토요일 낮 12시 30분, 더채플앳청담 커티지홀" />
+  <meta property="og:url" content="https://parkdongsam.github.io/" />
+  <meta property="og:image" content="https://parkdongsam.github.io/images/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-        .container {
-            max-width: 700px;
-            text-align: left;
-        }
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23111' stroke-width='1.5'/%3E%3C/svg%3E" />
 
-        .profile-wrapper {
-            margin-bottom: 1.5rem;
-            margin-left: -38px;
-            opacity: 0;
-            animation: fadeIn 0.8s ease forwards;
-            display: inline-block;
-            position: relative;
-            width: 140px;
-            height: auto;
-            cursor: pointer;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" crossorigin />
 
-        .profile-image {
-            width: 140px;
-            height: auto;
-            display: block;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .profile-image-hover {
-            width: 140px;
-            height: auto;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .profile-wrapper:hover .profile-image {
-            opacity: 0;
-        }
-
-        .profile-wrapper:hover .profile-image-hover {
-            opacity: 1;
-            animation: jelly 0.6s ease;
-        }
-
-        @keyframes jelly {
-            0% { transform: scale(1, 1); }
-            25% { transform: scale(0.9, 1.1); }
-            50% { transform: scale(1.1, 0.9); }
-            75% { transform: scale(0.95, 1.05); }
-            100% { transform: scale(1, 1); }
-        }
-
-        h1 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            letter-spacing: -0.02em;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.2s forwards;
-        }
-
-        .title {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.3s forwards;
-        }
-
-        .title a {
-            color: #666;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .title a:hover {
-            color: #000;
-        }
-
-        .email {
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.4s forwards;
-        }
-
-        .email a {
-            color: #888;
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: color 0.2s ease;
-            position: relative;
-        }
-
-        .email a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background-color: #000;
-            transition: width 0.3s ease;
-        }
-
-        .email a:hover {
-            color: #000;
-        }
-
-        .email a:hover::after {
-            width: 100%;
-        }
-
-        .about {
-            color: #444;
-            font-size: 0.85rem;
-            margin-bottom: 2rem;
-            text-align: left;
-            line-height: 1.7;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.5s forwards;
-        }
-
-        .divider {
-            width: 100%;
-            height: 1px;
-            background-color: #ddd;
-            margin: 0 0 2rem 0;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.6s forwards;
-        }
-
-        .quote {
-            color: #888;
-            font-size: 0.8rem;
-            line-height: 2;
-            text-align: left;
-            opacity: 0;
-            animation: fadeIn 0.8s ease 0.7s forwards;
-        }
-
-        .quote p {
-            margin-bottom: 0.8rem;
-        }
-
-        .quote .source {
-            color: #aaa;
-            font-size: 0.75rem;
-            font-style: italic;
-            margin-top: 1rem;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 640px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .profile-image {
-                width: 120px;
-            }
-        }
-    </style>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/themes.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="profile-wrapper">
-            <img src="images/tux-no-d3.png" alt="tux" class="profile-image">
-            <img src="images/welcome.png" alt="d3" class="profile-image-hover">
+  <main class="page">
+
+    <!-- ============================ INVITATION ============================ -->
+    <section class="sec hero" aria-labelledby="h-inv">
+      <p class="label" id="h-inv">Invitation</p>
+
+      <blockquote class="quote" data-lines="quote.lines"></blockquote>
+      <p class="quote__src" data-bind="quote.source"></p>
+
+      <div class="invite" data-lines="invitation" data-reveal></div>
+
+      <div class="names" data-names data-reveal></div>
+    </section>
+
+    <!-- =============================== DATE =============================== -->
+    <section class="sec" aria-labelledby="h-date">
+      <p class="label" id="h-date">Date</p>
+      <h1 class="date__big" data-reveal>
+        <time data-date-iso data-date-big></time>
+      </h1>
+      <p class="date__sub" data-date-sub data-reveal></p>
+
+      <div class="cal" data-reveal>
+        <div class="cal__head" aria-hidden="true">
+          <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
         </div>
+        <div class="cal__grid" data-cal role="presentation"></div>
+      </div>
 
-        <h1>PARK DongSam</h1>
-        <p class="title">System Engineer | <a href="https://elice.io" target="_blank" rel="noopener noreferrer">Elice Inc.</a></p>
-        <p class="email"><a href="mailto:d3@linux.com">d3@linux.com</a></p>
+      <div class="count" data-reveal aria-hidden="true">
+        <div class="count__unit"><span class="count__label">Days</span><span class="count__num" data-count="d">–</span></div>
+        <span class="count__sep">:</span>
+        <div class="count__unit"><span class="count__label">Hour</span><span class="count__num" data-count="h">–</span></div>
+        <span class="count__sep">:</span>
+        <div class="count__unit"><span class="count__label">Min</span><span class="count__num" data-count="m">–</span></div>
+        <span class="count__sep">:</span>
+        <div class="count__unit"><span class="count__label">Sec</span><span class="count__num" data-count="s">–</span></div>
+      </div>
+      <p class="dday" data-dday data-reveal></p>
+    </section>
 
-        <p class="about">
-            배움과 나눔을 통해 자아실현을 꿈꾸는 시스템 엔지니어입니다.<br>
-            자동화를 통해 생산성을 향상시킬 수 있는 방법을 고민하며, 다양한 플랫폼과 오픈소스 도구를 활용하는 것을 좋아합니다.
-        </p>
+    <!-- ============================= LOCATION ============================= -->
+    <section class="sec" aria-labelledby="h-loc">
+      <p class="label" id="h-loc">Location</p>
+      <h2 class="title">오시는 길</h2>
 
-        <div class="divider"></div>
+      <p class="venue__name" data-venue-name data-reveal></p>
+      <p class="venue__addr" data-bind="venue.address" data-reveal></p>
+      <p class="venue__tel" data-reveal>Tel. <span data-bind="venue.tel"></span></p>
 
-        <div class="quote">
-            <p>
-                여기는 구경거리의 세계<br>
-                처음부터 끝까지 모두 다 꾸며낸 것<br>
-                하지만 네가 나를 믿어준다면<br>
-                모두 다 진짜가 될거야
-            </p>
-            <p>
-                It's a Barnum and Bailey world,<br>
-                Just as phony as it can be,<br>
-                But it wouldn't be make believe<br>
-                If you believed in me.
-            </p>
-            <p class="source">— E.Y. Harburg & Harold Arlen, "It's Only a Paper Moon"</p>
+      <a class="map" data-map-link href="#" target="_blank" rel="noopener" aria-label="지도에서 보기" data-reveal>Map</a>
+      <a class="btn btn--ghost btn--full" data-sketch href="#" target="_blank" rel="noopener">약도 이미지 보기</a>
+
+      <div class="nav" data-reveal>
+        <p class="sub">내비게이션</p>
+        <p>원하시는 앱을 선택하시면 길안내가 시작됩니다.</p>
+        <div class="nav__apps">
+          <a class="btn" data-nav="naver" href="#" target="_blank" rel="noopener">네이버지도</a>
+          <a class="btn" data-nav="tmap" href="#">티맵</a>
+          <a class="btn" data-nav="kakao" href="#" target="_blank" rel="noopener">카카오맵</a>
         </div>
-    </div>
+      </div>
+
+      <div class="transit">
+        <div class="transit__block" data-reveal>
+          <p class="sub">지하철</p>
+          <ul class="transit__list" data-subway></ul>
+          <p class="transit__note" data-subway-note></p>
+        </div>
+        <div class="transit__block" data-reveal>
+          <p class="sub">버스</p>
+          <ul class="transit__list" data-bus></ul>
+          <div class="transit__note" data-shuttle></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================== INFORMATION ============================ -->
+    <section class="sec" aria-labelledby="h-info">
+      <p class="label" id="h-info">Information</p>
+      <h2 class="title">예식정보 및 안내사항</h2>
+      <div class="info" data-info data-reveal></div>
+    </section>
+
+    <!-- ============================== GALLERY ============================= -->
+    <section class="sec" aria-labelledby="h-gal">
+      <p class="label" id="h-gal">Gallery</p>
+      <h2 class="title">웨딩 갤러리</h2>
+
+      <div class="gal" data-reveal>
+        <div class="gal__stage">
+          <div class="gal__track" data-gal-track aria-roledescription="carousel" aria-label="웨딩 사진"></div>
+          <button class="gal__arrow gal__arrow--prev" type="button" data-gal-prev aria-label="이전 사진">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <button class="gal__arrow gal__arrow--next" type="button" data-gal-next aria-label="다음 사진">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+        <div class="gal__thumbs" data-gal-thumbs></div>
+        <p class="gal__count" data-gal-count aria-hidden="true"></p>
+      </div>
+    </section>
+
+    <!-- ============================== ACCOUNT ============================= -->
+    <section class="sec" aria-labelledby="h-acct">
+      <p class="label" id="h-acct">Account</p>
+      <h2 class="title">마음 전하실 곳</h2>
+      <div class="lead" data-lines="accountNote" data-reveal></div>
+
+      <div class="tabs" role="tablist" aria-label="계좌 구분" data-reveal>
+        <button class="tab" role="tab" type="button" data-side="groom" aria-selected="true">신랑측</button>
+        <button class="tab" role="tab" type="button" data-side="bride" aria-selected="false">신부측</button>
+      </div>
+      <div class="acct" data-acct role="tabpanel"></div>
+    </section>
+
+    <!-- =============================== FOOTER ============================= -->
+    <footer class="foot">
+      <p class="foot__names"><span data-bind="groom.name"></span> · <span data-bind="bride.name"></span></p>
+      <p class="foot__date"><span data-date-big></span></p>
+      <button class="btn btn--ghost" type="button" data-share>청첩장 공유하기</button>
+    </footer>
+  </main>
+
+  <div class="lab" role="group" aria-label="디자인 변형">
+    <button type="button" data-theme="batang">A</button>
+    <button type="button" data-theme="gothic">B</button>
+    <button type="button" data-theme="poster">C</button>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
