@@ -80,11 +80,18 @@
       <p class="venue__addr" data-bind="venue.address" data-reveal></p>
       <p class="venue__tel" data-reveal>Tel. <span data-bind="venue.tel"></span></p>
 
-      <figure class="map" data-reveal="map">
-        <!-- src 를 정적으로 둬야 브라우저가 JS 기다리지 않고 바로 받는다. data.js 가 덮어쓴다. -->
-        <img data-sketch src="images/map-sketch.png" width="1180" height="840" loading="lazy" decoding="async"
-             alt="오펠리스 웨딩컨벤션 약도 — 시청역 9번 출구 도보 4분, 서울역 3번 출구 도보 10분" />
-      </figure>
+      <!-- 지도 두 장. 마크업은 data.js 의 venue.maps 가 채운다.
+           첫 장은 정적으로 적어 둔다 — 브라우저가 JS 를 기다리지 않고 바로 받는다. -->
+      <div class="maps" data-maps>
+        <figure class="map" data-reveal="map">
+          <a class="map__link" href="https://map.naver.com/p/search/오펠리스웨딩컨벤션"
+             target="_blank" rel="noopener">
+            <img src="images/map-area.png" width="1400" height="1166" decoding="async"
+                 alt="오펠리스 웨딩컨벤션 위치 — 시청역과 서울역 사이, 숭례문 서쪽" />
+          </a>
+          <figcaption class="map__cap">지도를 누르면 네이버지도에서 열립니다</figcaption>
+        </figure>
+      </div>
 
       <div class="nav" data-reveal>
         <p class="sub">내비게이션</p>

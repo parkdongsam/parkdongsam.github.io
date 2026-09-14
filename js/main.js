@@ -214,17 +214,39 @@
     const a = $(`[data-nav="${k}"]`);
     if (a) a.href = href;
   }
-  const sketch = $('[data-sketch]');
-  if (sketch) {
-    if (V.sketch?.src) {
-      sketch.src = V.sketch.src;
-      // width/height 를 주면 이미지가 늦게 와도 자리가 미리 잡혀 레이아웃이 안 밀린다
-      if (V.sketch.w) sketch.width = V.sketch.w;
-      if (V.sketch.h) sketch.height = V.sketch.h;
-      sketch.loading = 'lazy';
-      sketch.decoding = 'async';
-    } else {
-      sketch.closest('.map')?.remove();
+  /* 지도들. 첫 장은 index.html 에 정적으로 적혀 있으므로 그 <img> 를 그대로 쓴다 —
+     새로 만들면 이미 받아 둔 이미지를 버리고 다시 받게 된다. */
+  const mapsRoot = $('[data-maps]');
+  if (mapsRoot) {
+    const list = V.maps || [];
+    if (!list.length) mapsRoot.remove();
+    else {
+      const existing = $('img', mapsRoot);
+      const figures = list.map((m, i) => {
+        const fig = el('figure', 'map');
+        fig.dataset.reveal = 'map';
+        const img = (i === 0 && existing) ? existing : el('img');
+        img.src = m.src;
+        // width/height 를 주면 이미지가 늦게 와도 자리가 미리 잡혀 레이아웃이 안 밀린다
+        if (m.w) img.width = m.w;
+        if (m.h) img.height = m.h;
+        img.alt = m.alt || '';
+        img.decoding = 'async';
+        if (i > 0) img.loading = 'lazy';   // 첫 장은 바로 받는다
+        if (m.link && V.links?.naver) {
+          const a = el('a', 'map__link');
+          a.href = V.links.naver;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.append(img);
+          fig.append(a);
+        } else {
+          fig.append(img);
+        }
+        if (m.caption) fig.append(el('figcaption', 'map__cap', m.caption));
+        return fig;
+      });
+      mapsRoot.replaceChildren(...figures);
     }
   }
 

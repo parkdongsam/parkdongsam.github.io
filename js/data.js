@@ -44,13 +44,29 @@ window.WEDDING = {
     address: '서울시 중구 세종대로9길 41 퍼시픽타워 20층',
     tel: '02-2130-2300',
     query: '오펠리스웨딩컨벤션',
+    // OSM 실측 좌표. 지도 이미지와 링크가 같은 값을 쓴다.
+    lat: 37.5613467,
+    lon: 126.9729642,
     links: {
+      // 네이버는 검색 결과에 예식장이 등록돼 있어 이름 검색이 가장 잘 맞는다.
       naver: 'https://map.naver.com/p/search/오펠리스웨딩컨벤션',
-      kakao: 'https://map.kakao.com/link/search/오펠리스웨딩컨벤션',
+      // 카카오는 link/search 로 보내면 앱 설치 안내 화면에서 끝난다.
+      // link/map 은 좌표로 바로 지도를 띄우므로 앱이 없어도 볼 수 있다.
+      kakao: 'https://map.kakao.com/link/map/오펠리스웨딩컨벤션,37.5613467,126.9729642',
+      // 티맵은 앱 전용 스킴이다. 앱이 없으면 아무 일도 일어나지 않는다.
       tmap: 'tmap://search?name=오펠리스웨딩컨벤션',
     },
-    // 인쇄 청첩장의 약도. w/h 를 함께 두어 로딩 중 레이아웃이 밀리지 않게 한다.
-    sketch: { src: 'images/map-sketch.png', w: 1180, h: 840 },
+    // 지도 두 장. w/h 를 함께 둬야 로딩 중 레이아웃이 밀리지 않는다.
+    // area   — OSM 데이터로 직접 그린 위치도 (tools/build-map.py)
+    // sketch — 인쇄 청첩장의 약도. 역에서 걸어오는 경로가 들어 있다.
+    maps: [
+      { src: 'images/map-area.png', w: 1400, h: 1166,
+        alt: '오펠리스 웨딩컨벤션 위치 — 시청역과 서울역 사이, 숭례문 서쪽',
+        caption: '지도를 누르면 네이버지도에서 열립니다', link: true },
+      { src: 'images/map-sketch.png', w: 1180, h: 840,
+        alt: '청첩장 약도 — 시청역 9번 출구 도보 4분, 서울역 3번 출구 도보 10분',
+        caption: '청첩장 약도 · 역에서 걸어오시는 길' },
+    ],
   },
 
   transit: {
