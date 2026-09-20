@@ -90,11 +90,18 @@ window.WEDDING = {
   // 안내사항. 비워두면 섹션이 숨겨진다. TODO: 확정 후 채움.
   info: [],
 
-  // TODO: 실제 사진. 세로 3:4 권장. 경로만 교체.
+  // 스튜디오 원본을 2:3 으로 맞춰 넣었다 (좌우만 잘랐다 — 전신 사진이라
+  // 위아래를 자르면 머리나 발이 날아간다). 메타데이터는 전부 제거했다.
+  // 비율을 바꾸려면 css 의 .gal__item 도 같이 바꿔야 한다.
   gallery: [
-    'images/ph-1.svg',
-    'images/ph-2.svg',
-    'images/ph-3.svg',
+    'images/photo-1.jpg',
+    'images/photo-2.jpg',
+    'images/photo-3.jpg',
+    'images/photo-4.jpg',
+    'images/photo-5.jpg',
+    'images/photo-6.jpg',
+    'images/photo-7.jpg',
+    'images/photo-8.jpg',
   ],
 
   accountNote: [
