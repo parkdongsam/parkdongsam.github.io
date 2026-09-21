@@ -108,8 +108,8 @@
 
   /* ---- 날짜 표기 ------------------------------------------------------ */
   const D = W.date;
-  const big = $('[data-date-big]');
-  if (big) big.textContent = `${D.year}.${pad(D.month)}.${pad(D.day)}`;
+  // 날짜는 달력 섹션과 푸터 두 군데에 있다. $ 로 잡으면 앞의 하나만 채워진다.
+  for (const n of $$('[data-date-big]')) n.textContent = `${D.year}.${pad(D.month)}.${pad(D.day)}`;
   const sub = $('[data-date-sub]');
   if (sub) sub.textContent = `${D.weekdayKo} ${D.timeKo}`;
   const time = $('time[data-date-iso]');
@@ -210,7 +210,25 @@
   const V = W.venue;
   const venueName = $('[data-venue-name]');
   if (venueName) venueName.textContent = `${V.name}, ${V.floor}`;
+  /* 티맵은 웹 주소가 없고 앱 스킴뿐이다. 앱이 없으면 눌러도 아무 일이
+     없으므로, 잠깐 기다려 보고 화면이 그대로면 스토어로 보낸다.
+     앱이 열렸다면 이 페이지는 뒤로 밀려 document.hidden 이 true 가 된다. */
+  const tmapBtn = $('[data-nav="tmap"]');
+  if (tmapBtn && V.links?.tmap) {
+    tmapBtn.href = V.links.tmap;          // JS 가 죽어도 앱이 있으면 열린다
+    tmapBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const store = V.links.tmapStore || {};
+      const url = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? store.ios : store.android;
+      const t = setTimeout(() => { if (!document.hidden && url) location.href = url; }, 1400);
+      const stop = () => { if (document.hidden) clearTimeout(t); };
+      document.addEventListener('visibilitychange', stop, { once: true });
+      location.href = V.links.tmap;
+    });
+  }
+
   for (const [k, href] of Object.entries(V.links || {})) {
+    if (k === 'tmap' || k === 'tmapStore') continue;   // 위에서 따로 처리한다
     const a = $(`[data-nav="${k}"]`);
     if (a) a.href = href;
   }
@@ -329,6 +347,12 @@
     catch {
       const ta = el('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
       document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    }
+    /* 글자만 바꾸면 버튼 폭이 줄었다 늘었다 한다. 바꾸기 전 폭을 재서
+       고정해 두면 글자만 갈리고 버튼은 제자리에 있는다. */
+    if (!btn.dataset.w) {
+      btn.dataset.w = '1';
+      btn.style.minWidth = btn.getBoundingClientRect().width + 'px';
     }
     const prev = btn.textContent;
     btn.dataset.done = 'true'; btn.textContent = '복사됨';

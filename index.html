@@ -80,16 +80,12 @@
       <p class="venue__addr" data-bind="venue.address" data-reveal></p>
       <p class="venue__tel" data-reveal>Tel. <span data-bind="venue.tel"></span></p>
 
-      <!-- 지도 두 장. 마크업은 data.js 의 venue.maps 가 채운다.
+      <!-- 약도. 마크업은 data.js 의 venue.maps 가 채운다.
            첫 장은 정적으로 적어 둔다 — 브라우저가 JS 를 기다리지 않고 바로 받는다. -->
       <div class="maps" data-maps>
         <figure class="map" data-reveal="map">
-          <a class="map__link" href="https://map.naver.com/p/search/오펠리스웨딩컨벤션"
-             target="_blank" rel="noopener">
-            <img src="images/map-area.png" width="1400" height="1166" decoding="async"
-                 alt="오펠리스 웨딩컨벤션 위치 — 시청역과 서울역 사이, 숭례문 서쪽" />
-          </a>
-          <figcaption class="map__cap">지도를 누르면 네이버지도에서 열립니다</figcaption>
+          <img src="images/map-sketch.png" width="1180" height="840" decoding="async"
+               alt="오펠리스 웨딩컨벤션 약도 — 시청역 9번 출구 도보 4분, 서울역 3번 출구 도보 10분" />
         </figure>
       </div>
 
@@ -152,8 +148,6 @@
     <section class="sec" aria-labelledby="h-acct" data-reveal="rule">
       <p class="label" id="h-acct">Account</p>
       <h2 class="title" data-reveal="mask">마음 전하실 곳</h2>
-      <div class="lead" data-lines="accountNote" data-reveal="lines"></div>
-
       <div class="tabs" role="tablist" aria-label="계좌 구분" data-reveal>
         <button class="tab" role="tab" type="button" data-side="groom" aria-selected="true">신랑측</button>
         <button class="tab" role="tab" type="button" data-side="bride" aria-selected="false">신부측</button>
@@ -163,7 +157,6 @@
 
     <!-- =============================== FOOTER ============================= -->
     <footer class="foot">
-      <p class="foot__names"><span data-bind="groom.name"></span> · <span data-bind="bride.name"></span></p>
       <p class="foot__date"><span data-date-big></span></p>
       <button class="btn btn--ghost" type="button" data-share>청첩장 공유하기</button>
     </footer>

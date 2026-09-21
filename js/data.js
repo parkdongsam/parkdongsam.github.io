@@ -53,19 +53,20 @@ window.WEDDING = {
       // 카카오는 link/search 로 보내면 앱 설치 안내 화면에서 끝난다.
       // link/map 은 좌표로 바로 지도를 띄우므로 앱이 없어도 볼 수 있다.
       kakao: 'https://map.kakao.com/link/map/오펠리스웨딩컨벤션,37.5613467,126.9729642',
-      // 티맵은 앱 전용 스킴이다. 앱이 없으면 아무 일도 일어나지 않는다.
-      tmap: 'tmap://search?name=오펠리스웨딩컨벤션',
+      // 티맵은 앱 전용 스킴이다. search 는 문서에 없는 형식이라 앱이 깔려
+      // 있어도 아무 일이 없었다. route 에 좌표를 실어 보내면 바로 안내가 시작된다.
+      // 앱이 없는 사람을 위해 tmapStore 로 떨어뜨린다 (main.js 가 처리).
+      tmap: 'tmap://route?goalname=오펠리스웨딩컨벤션&goalx=126.9729642&goaly=37.5613467',
+      // 실재 확인함: iOS 앱 id 431589174, 안드로이드 패키지 com.skt.tmap.ku
+      tmapStore: {
+        ios: 'https://apps.apple.com/kr/app/id431589174',
+        android: 'https://play.google.com/store/apps/details?id=com.skt.tmap.ku',
+      },
     },
-    // 지도 두 장. w/h 를 함께 둬야 로딩 중 레이아웃이 밀리지 않는다.
-    // area   — OSM 데이터로 직접 그린 위치도 (tools/build-map.py)
-    // sketch — 인쇄 청첩장의 약도. 역에서 걸어오는 경로가 들어 있다.
+    // 인쇄 청첩장의 약도. w/h 를 함께 둬야 로딩 중 레이아웃이 밀리지 않는다.
     maps: [
-      { src: 'images/map-area.png', w: 1400, h: 1166,
-        alt: '오펠리스 웨딩컨벤션 위치 — 시청역과 서울역 사이, 숭례문 서쪽',
-        caption: '지도를 누르면 네이버지도에서 열립니다', link: true },
       { src: 'images/map-sketch.png', w: 1180, h: 840,
-        alt: '청첩장 약도 — 시청역 9번 출구 도보 4분, 서울역 3번 출구 도보 10분',
-        caption: '청첩장 약도 · 역에서 걸어오시는 길' },
+        alt: '오펠리스 웨딩컨벤션 약도 — 시청역 9번 출구 도보 4분, 서울역 3번 출구 도보 10분' },
     ],
   },
 
@@ -104,11 +105,6 @@ window.WEDDING = {
     'images/photo-8.jpg',
   ],
 
-  accountNote: [
-    '참석이 어려우신 분들을 위해',
-    '계좌번호를 기재하였습니다.',
-    '너그러운 마음으로 양해 부탁드립니다.',
-  ],
   // TODO: 실제 계좌
   accounts: {
     groom: [
