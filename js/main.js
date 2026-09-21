@@ -214,16 +214,20 @@
      없으므로, 잠깐 기다려 보고 화면이 그대로면 스토어로 보낸다.
      앱이 열렸다면 이 페이지는 뒤로 밀려 document.hidden 이 true 가 된다. */
   const tmapBtn = $('[data-nav="tmap"]');
-  if (tmapBtn && V.links?.tmap) {
-    tmapBtn.href = V.links.tmap;          // JS 가 죽어도 앱이 있으면 열린다
+  const TM = V.links?.tmap;            // T 는 아래 transit 이 쓴다
+  if (tmapBtn && TM) {
+    const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const scheme = (ios ? TM.ios : TM.android) + encodeURIComponent(TM.query || V.query || '');
+    tmapBtn.href = scheme;                // JS 가 죽어도 앱이 있으면 열린다
     tmapBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const store = V.links.tmapStore || {};
-      const url = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? store.ios : store.android;
-      const t = setTimeout(() => { if (!document.hidden && url) location.href = url; }, 1400);
-      const stop = () => { if (document.hidden) clearTimeout(t); };
-      document.addEventListener('visibilitychange', stop, { once: true });
-      location.href = V.links.tmap;
+      const store = (V.links.tmapStore || {})[ios ? 'ios' : 'android'];
+      /* 앱이 열리면 이 페이지가 뒤로 밀려 document.hidden 이 true 가 된다.
+         그대로면 앱이 없는 것이므로 스토어로 보낸다. */
+      const t = setTimeout(() => { if (!document.hidden && store) location.href = store; }, 1500);
+      document.addEventListener('visibilitychange',
+        () => { if (document.hidden) clearTimeout(t); }, { once: true });
+      location.href = scheme;
     });
   }
 
@@ -362,11 +366,16 @@
     if (!acctRoot) return;
     acctRoot.replaceChildren(...(W.accounts[side] || []).map((a) => {
       const card = el('div', 'acct__card');
-      card.append(el('p', 'acct__holder', a.holder));
+      // 이름 세 개가 나란히 있으면 누가 누군지 모른다. 관계를 먼저 쓴다.
+      const who = el('p', 'acct__who');
+      if (a.rel) who.append(el('span', 'acct__rel', a.rel));
+      who.append(el('span', 'acct__holder', a.holder));
+      card.append(who);
       const line = el('p', 'acct__line');
-      line.append(el('span', null, a.bank), el('span', 'acct__num', a.number));
+      line.append(el('span', 'acct__bank', a.bank), el('span', 'acct__num', a.number));
       const btn = el('button', 'acct__copy', '복사'); btn.type = 'button';
-      btn.addEventListener('click', () => copy(`${a.bank} ${a.number}`, btn));
+      // 은행 이름까지 복사하면 뱅킹 앱 입력칸에 그대로 못 붙인다. 번호만 준다.
+      btn.addEventListener('click', () => copy(a.number, btn));
       line.append(btn);
       card.append(line);
       if (a.kakaopay) { const k = el('a', 'btn btn--ghost', '카카오페이'); k.href = a.kakaopay; k.target = '_blank'; k.rel = 'noopener'; card.append(k); }

@@ -433,7 +433,20 @@ a { color: inherit; text-decoration: none; }
   gap: 0.875rem;
   text-align: center;
 }
+/* 관계 · 이름 — 세 사람이 나란히 있어서 이름만으로는 구분이 안 된다 */
+.acct__who {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.acct__rel {
+  font-size: var(--fs-meta);
+  color: var(--ink-3);
+}
 .acct__holder { font-size: var(--fs-body); }
+.acct__bank { color: var(--ink-2); }
 .acct__line {
   display: flex;
   justify-content: center;
@@ -445,6 +458,9 @@ a { color: inherit; text-decoration: none; }
 .acct__num { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; color: var(--ink); }
 .acct__copy {
   min-height: 2rem;
+  /* '복사' 와 '복사됨' 둘 다 담기는 폭. 좁게 두면 누를 때마다 버튼이
+     넓어지면서 번호가 밀린다. */
+  min-width: 4rem;
   padding: 0 0.75rem;
   border: 1px solid var(--rule);
   font-size: var(--fs-meta);

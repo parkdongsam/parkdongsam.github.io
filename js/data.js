@@ -53,11 +53,16 @@ window.WEDDING = {
       // 카카오는 link/search 로 보내면 앱 설치 안내 화면에서 끝난다.
       // link/map 은 좌표로 바로 지도를 띄우므로 앱이 없어도 볼 수 있다.
       kakao: 'https://map.kakao.com/link/map/오펠리스웨딩컨벤션,37.5613467,126.9729642',
-      // 티맵은 앱 전용 스킴이다. search 는 문서에 없는 형식이라 앱이 깔려
-      // 있어도 아무 일이 없었다. route 에 좌표를 실어 보내면 바로 안내가 시작된다.
-      // 앱이 없는 사람을 위해 tmapStore 로 떨어뜨린다 (main.js 가 처리).
-      tmap: 'tmap://route?goalname=오펠리스웨딩컨벤션&goalx=126.9729642&goaly=37.5613467',
-      // 실재 확인함: iOS 앱 id 431589174, 안드로이드 패키지 com.skt.tmap.ku
+      // 티맵은 앱 전용 스킴이고, iOS 와 안드로이드가 형식이 서로 다르다.
+      // 하나만 쓰면 반대쪽 기기에서는 눌러도 아무 일이 없다.
+      // 이름보다 주소로 검색하는 편이 정확히 걸린다.
+      tmap: {
+        ios: 'tmap://?search=',
+        android: 'tmap://search?name=',
+        query: '서울 중구 세종대로9길 41',
+      },
+      // 앱이 없을 때 보낼 곳. 실재 확인함 (iOS 앱 id 431589174,
+      // 안드로이드 패키지 com.skt.tmap.ku).
       tmapStore: {
         ios: 'https://apps.apple.com/kr/app/id431589174',
         android: 'https://play.google.com/store/apps/details?id=com.skt.tmap.ku',
@@ -105,13 +110,16 @@ window.WEDDING = {
     'images/photo-8.jpg',
   ],
 
-  // TODO: 실제 계좌
   accounts: {
     groom: [
-      { holder: '박동삼', bank: '은행', number: '000-000-000000', kakaopay: null },
+      { rel: '신랑',   holder: '박동삼', bank: '토스뱅크', number: '1001-5256-3999' },
+      { rel: '아버지', holder: '박종만', bank: '국민은행', number: '044202-04-284578' },
+      { rel: '어머니', holder: '신용선', bank: '우리은행', number: '1002-634-057530' },
     ],
     bride: [
-      { holder: '김연의', bank: '은행', number: '000-000-000000', kakaopay: null },
+      { rel: '신부',   holder: '김연의', bank: '토스뱅크', number: '1000-1419-2405' },
+      { rel: '아버지', holder: '김성식', bank: '국민은행', number: '235601-04-283538' },
+      { rel: '어머니', holder: '조미선', bank: '국민은행', number: '235601-04-024964' },
     ],
   },
 };

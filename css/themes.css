@@ -30,6 +30,9 @@
 [data-theme='gothic'] .tab { border-radius: 0; }
 [data-theme='gothic'] .acct__card { text-align: left; }
 [data-theme='gothic'] .acct__line { justify-content: flex-start; }
+[data-theme='gothic'] .acct__who { justify-content: flex-start; }
+/* 번호 길이가 제각각이라 버튼이 들쭉날쭉해진다. 오른쪽 끝에 맞춰 세운다. */
+[data-theme='gothic'] .acct__copy { margin-left: auto; }
 [data-theme='gothic'] .btn { border-radius: 0; }
 /* 섹션 라벨을 괘선 위에 얹는다 — 스위스 편집 그리드 */
 [data-theme='gothic'] .sec + .sec { padding-top: calc(var(--sec) - 1.5rem); }
