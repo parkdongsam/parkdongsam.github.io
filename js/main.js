@@ -77,9 +77,17 @@
 
   /* ---- 변형 스위처 ---------------------------------------------------- */
   const params = new URLSearchParams(location.search);
-  const THEMES = ['batang', 'gothic', 'poster'];
+  const THEMES = ['batang', 'gothic', 'poster', 'bleed', 'midnight', 'margin'];
   const theme = params.get('theme');
   if (THEMES.includes(theme)) document.documentElement.dataset.theme = theme;
+
+  /* 브라우저 상단 바 색을 지면 색에 맞춘다. 어두운 변형에서 흰 띠가
+     남으면 화면 위쪽만 잘린 것처럼 보인다. */
+  const syncBarColour = () => {
+    const m = $('meta[name="theme-color"]');
+    if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#ffffff';
+  };
+  syncBarColour();
   const lab = $('.lab');
   if (lab && params.has('lab')) {
     lab.dataset.show = 'true';
@@ -88,6 +96,7 @@
       b.setAttribute('aria-pressed', String(b.dataset.theme === cur));
       b.addEventListener('click', () => {
         document.documentElement.dataset.theme = b.dataset.theme;
+        syncBarColour();
         for (const x of $$('button', lab)) x.setAttribute('aria-pressed', String(x === b));
         const u = new URL(location.href);
         u.searchParams.set('theme', b.dataset.theme);
@@ -117,6 +126,16 @@
     const v = get(node.dataset.hideIfEmpty);
     if (!v || (Array.isArray(v) && !v.length)) node.remove();
   }
+
+  /* 사진 경로를 CSS 변수로 올린다. 마크업은 하나로 두고도 변형이
+     사진을 배경으로 깔 수 있다. */
+  /* 절대 경로여야 한다. CSS 변수 안의 상대 경로는 그 변수를 '쓰는'
+     스타일시트 기준으로 풀려서, css/variants.css 가 쓰면
+     css/images/... 를 찾다가 404 가 난다. */
+  (W.gallery || []).forEach((src, i) => {
+    const abs = new URL(src, location.href).href;
+    document.documentElement.style.setProperty(`--photo-${i + 1}`, `url("${abs}")`);
+  });
 
   /* ---- 이름 · 혼주 ---------------------------------------------------- */
   const namesRoot = $('[data-names]');
