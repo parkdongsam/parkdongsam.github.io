@@ -22,6 +22,38 @@
   const MOTION = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.add('js');
 
+  /* ---- 확대 차단 ----------------------------------------------------------
+   * 사진에 pointer-events:none 을 걸어도 그건 사진만 막는다. 브라우저의
+   * 핀치 줌은 페이지 전체를 키우기 때문에 결과적으로 사진이 확대돼 보인다.
+   * iOS 사파리는 접근성을 이유로 user-scalable=no 를 무시하므로, 확대를
+   * 실제로 막으려면 제스처 이벤트를 직접 취소해야 한다.
+   *
+   * 참고: 확대를 막으면 시력이 낮은 사람이 글자를 키울 수 없다. 본문을
+   * 16px 이상으로 두고 명도 대비를 확보해 둔 것은 그 때문이다.
+   * ------------------------------------------------------------------- */
+  const noZoom = (e) => e.preventDefault();
+  // 사파리 전용 제스처 이벤트 — 핀치를 시작하는 순간 취소된다
+  for (const t of ['gesturestart', 'gesturechange', 'gestureend']) {
+    document.addEventListener(t, noZoom, { passive: false });
+  }
+  // 손가락 두 개 이상이면 확대 시도로 본다
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  /* 더블탭 확대. 그냥 두 번째 탭을 삼키면 버튼을 연달아 누를 때 두 번째가
+     먹히지 않는다. 같은 자리를 빠르게 두 번 두드린 경우에만, 그것도
+     누를 것이 없는 빈 곳에서만 막는다. */
+  let tapAt = 0, tapX = 0, tapY = 0;
+  document.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const now = Date.now();
+    const samePlace = Math.abs(t.clientX - tapX) < 32 && Math.abs(t.clientY - tapY) < 32;
+    const onControl = e.target.closest('a, button, input, textarea, select, [role="tab"]');
+    if (!onControl && samePlace && now - tapAt < 300) e.preventDefault();
+    tapAt = now; tapX = t.clientX; tapY = t.clientY;
+  }, { passive: false });
+
   /* 자식마다 --i 를 매겨 차례로 나오게 한다 */
   const stagger = (nodes) =>
     nodes.forEach((n, i) => n.style.setProperty('--i', i));

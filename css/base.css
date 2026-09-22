@@ -51,6 +51,10 @@ body {
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
+  /* 세로 스크롤만 허용 = 핀치 줌 차단 (크롬·안드로이드).
+     사파리는 이것도 무시해서 JS 가 한 겹 더 막는다.
+     갤러리 트랙은 자기 규칙으로 가로 스와이프를 되살린다. */
+  touch-action: pan-y;
 }
 h1, h2, h3, p, figure, blockquote, ul, ol { margin: 0; }
 ul, ol { padding: 0; list-style: none; }

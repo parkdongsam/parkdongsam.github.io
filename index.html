@@ -2,7 +2,10 @@
 <html lang="ko" data-theme="gothic">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- 확대 금지. user-scalable=no 는 안드로이드 크롬에서만 듣는다.
+       iOS 사파리는 이 값을 무시하므로 js/main.js 가 제스처를 직접 막는다. -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>박동삼 · 김연의 결혼합니다</title>
   <meta name="description" content="2026년 10월 25일 일요일 오후 1시 40분 · 오펠리스 웨딩컨벤션 라비제홀" />
   <meta name="theme-color" content="#ffffff" />
