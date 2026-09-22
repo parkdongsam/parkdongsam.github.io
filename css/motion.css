@@ -10,10 +10,17 @@
    ========================================================================== */
 
 :root {
-  --m-dur: 780ms;      /* 기본 진입 */
-  --m-draw: 1100ms;    /* 선이 그어지는 시간 — 눈으로 따라갈 수 있어야 한다 */
-  --m-step: 100ms;     /* 줄 사이 시차 — 한 줄씩 읽히도록 충분히 벌린다 */
+  /* 한 값으로 전부 돌리면 흔한 스크롤 라이브러리의 fade-up 과 같은
+     제스처가 된다. 무엇이 나타나느냐에 따라 시간을 달리 준다.
+     제목은 무게 있게, 목록은 빠르게, 선은 눈으로 따라갈 수 있게. */
+  --m-dur: 620ms;      /* 기본 진입 */
+  --m-line: 700ms;     /* 문장 한 줄 */
+  --m-mask: 880ms;     /* 제목·날짜 — 지면의 주인공이라 천천히 */
+  --m-list: 540ms;     /* 이름·카드처럼 여럿인 것 */
+  --m-draw: 1100ms;    /* 선이 그어지는 시간 */
+  --m-step: 100ms;     /* 줄 사이 시차 */
   --m-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --m-ease-soft: cubic-bezier(0.33, 1, 0.68, 1);   /* 덜 튀는 마무리 */
 }
 
 /* --------------------------------------------------------------------------
@@ -61,9 +68,13 @@
   transform: translateY(110%);
   opacity: 0;
   transition:
-    transform var(--m-dur) var(--m-ease),
-    opacity calc(var(--m-dur) * 0.6) linear;
+    transform var(--m-line) var(--m-ease),
+    opacity calc(var(--m-line) * 0.6) linear;
   transition-delay: calc(var(--i, 0) * var(--m-step) + var(--m-delay, 0ms));
+}
+/* 제목과 날짜는 더 오래 올라온다 */
+:root.js [data-reveal='mask'] .rv-l > span {
+  transition-duration: var(--m-mask), calc(var(--m-mask) * 0.5);
 }
 :root.js [data-reveal='lines'].is-in .rv-l > span,
 :root.js [data-reveal='mask'].is-in .rv-l > span {
@@ -78,8 +89,8 @@
   opacity: 0;
   transform: translateY(12px);
   transition:
-    opacity var(--m-dur) var(--m-ease),
-    transform var(--m-dur) var(--m-ease);
+    opacity var(--m-list) var(--m-ease-soft),
+    transform var(--m-list) var(--m-ease-soft);
   transition-delay: calc(var(--i, 0) * 110ms + var(--m-delay, 0ms));
 }
 :root.js [data-reveal='stagger'].is-in > * { opacity: 1; transform: none; }

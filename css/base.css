@@ -51,6 +51,11 @@ body {
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
+  /* 한글은 어절 단위로 끊어야 한다. 이게 없으면 '세종대로9길' 이
+     '세 / 종대로9길' 로 갈라진다. iOS 9 부터 듣는다.
+     대신 끊을 데가 없는 긴 덩어리는 넘치므로 break-word 로 받쳐 둔다. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   /* 세로 스크롤만 허용 = 핀치 줌 차단 (크롬·안드로이드).
      사파리는 이것도 무시해서 JS 가 한 겹 더 막는다.
      갤러리 트랙은 자기 규칙으로 가로 스와이프를 되살린다. */
@@ -92,6 +97,8 @@ a { color: inherit; text-decoration: none; }
   font-weight: 400;
 }
 .title {
+  /* 두 줄이 될 때 한 줄에 한 글자만 남는 모양을 막는다. iOS 17.5+ */
+  text-wrap: balance;
   margin-top: 0.625rem;
   font-size: var(--fs-title);
   font-weight: 400;
