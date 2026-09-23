@@ -77,7 +77,7 @@
 
   /* ---- 변형 스위처 ---------------------------------------------------- */
   const params = new URLSearchParams(location.search);
-  const THEMES = ['batang', 'gothic', 'poster', 'bleed', 'midnight', 'margin'];
+  const THEMES = ['batang', 'gothic', 'poster', 'bleed', 'midnight', 'margin', 'gala', 'arcade'];
   const theme = params.get('theme');
   if (THEMES.includes(theme)) document.documentElement.dataset.theme = theme;
 
