@@ -77,7 +77,8 @@
 
   /* ---- 변형 스위처 ---------------------------------------------------- */
   const params = new URLSearchParams(location.search);
-  const THEMES = ['batang', 'gothic', 'poster', 'bleed', 'midnight', 'margin', 'gala', 'arcade'];
+  const THEMES = ['batang', 'gothic', 'poster', 'bleed', 'midnight', 'margin', 'gala', 'arcade',
+    'deck', 'chapter', 'trail'];
   const theme = params.get('theme');
   if (THEMES.includes(theme)) document.documentElement.dataset.theme = theme;
 
@@ -472,12 +473,17 @@
        화면 위로 이미 지나간 것도 '보여준 것'으로 쳐야 한다 —
        기준은 하나: 위쪽 모서리가 화면 88% 선보다 위에 있으면 보여준다. */
     const pending = new Set(reveals);
+    const page = $('.page');
     let queued = false;
     const sweep = () => {
       queued = false;
-      const line = window.innerHeight * 0.88;
+      const yLine = window.innerHeight * 0.88;
+      const xLine = window.innerWidth * 0.95;
       for (const n of pending) {
-        if (n.getBoundingClientRect().top < line) {
+        const r = n.getBoundingClientRect();
+        // 두 축을 같이 본다. 세로만 보면 옆으로 넘기는 변형에서
+        // 아직 오지 않은 카드까지 전부 나타나 버린다.
+        if (r.top < yLine && r.left < xLine) {
           n.classList.add('is-in');
           pending.delete(n);
         }
@@ -485,6 +491,7 @@
       if (!pending.size) {
         window.removeEventListener('scroll', onScroll);
         window.removeEventListener('resize', onScroll);
+        page?.removeEventListener('scroll', onScroll);
       }
     };
     const onScroll = () => {
@@ -494,6 +501,8 @@
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    // 가로로 넘기는 변형에서는 창이 아니라 .page 가 움직인다
+    page?.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
 })();

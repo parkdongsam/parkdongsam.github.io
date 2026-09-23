@@ -1,0 +1,194 @@
+/* ==========================================================================
+   변형 I · J · K — 읽는 방식을 바꾼다
+   --------------------------------------------------------------------------
+   앞의 여덟은 전부 '세로로 긴 한 줄'이었다. 사진을 끝까지 늘리든, 바탕을
+   검게 하든, 라벨을 세우든, 위에서 아래로 죽 읽는다는 점은 같았다.
+   그래서 비슷해 보인다. 여기 셋은 페이지의 '모양'이 아니라 '동선'을 바꾼다.
+
+   I deck    — 옆으로 넘긴다. 카드 한 장에 한 가지. 세로 스크롤이 없다.
+   J chapter — 한 장이 한 화면을 채우고 딱딱 멈춘다. 슬라이드처럼 읽는다.
+   K trail   — 왼쪽에 길이 나 있고 그 길을 따라 사건이 하나씩 놓인다.
+   ========================================================================== */
+
+/* ==========================================================================
+   I — DECK · 옆으로 넘기는 카드
+   ========================================================================== */
+[data-theme='deck'] {
+  --sec: 0rem;
+  --fs-title: 1.5rem;
+  --fs-date: 2.75rem;
+}
+[data-theme='deck'] body {
+  overflow: hidden;              /* 세로로는 움직이지 않는다 */
+  height: 100dvh;
+}
+[data-theme='deck'] .page {
+  max-width: none;
+  padding: 0;
+  height: 100dvh;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  /* body 에 걸린 pan-y 를 되돌린다. 안 그러면 옆으로 넘길 수 없다. */
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+[data-theme='deck'] .page::-webkit-scrollbar { display: none; }
+
+[data-theme='deck'] .sec,
+[data-theme='deck'] .foot {
+  flex: 0 0 100%;
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-align: start;
+  border: 0;
+  padding: 4rem var(--gutter) 3.5rem;
+  text-align: left;
+  /* 카드 안에서는 세로로, 카드끼리는 가로로 — 둘 다 열어 둔다 */
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+[data-theme='deck'] .sec + .sec[data-reveal='rule']::before { display: none; }
+[data-theme='deck'] .names__row,
+[data-theme='deck'] .count,
+[data-theme='deck'] .acct__who,
+[data-theme='deck'] .acct__line { justify-content: flex-start; }
+[data-theme='deck'] .cal { margin-left: 0; max-width: 100%; }
+[data-theme='deck'] .tabs { margin-left: 0; }
+[data-theme='deck'] .acct__card { text-align: left; }
+[data-theme='deck'] .acct__copy { margin-left: auto; }
+
+/* 유도선을 눕힌다 — 아래가 아니라 옆으로 가라는 뜻이 된다 */
+[data-theme='deck'] .cue {
+  width: 3.5rem;
+  height: 1px;
+  margin: 2rem 0 0;
+}
+[data-theme='deck'] .cue span { animation-name: cue-x; }
+@keyframes cue-x {
+  0%   { transform: scaleX(0); transform-origin: left; }
+  45%  { transform: scaleX(1); transform-origin: left; }
+  55%  { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+/* ==========================================================================
+   J — CHAPTER · 한 화면에 한 장
+   ========================================================================== */
+[data-theme='chapter'] {
+  --fs-title: 2rem;
+  --fs-date: 3.75rem;
+  --fs-body: 1.0625rem;
+  --sec: 0rem;
+  --ls-label: 0.36em;
+}
+/* data-theme 은 html 자신에 붙어 있다. '[data-theme] html' 로 쓰면
+   html 안의 html 을 찾는 셈이라 아무 데도 안 걸린다.
+   proximity 로 둔다 — mandatory 는 화면보다 긴 장(오시는 길)에서
+   스크롤을 가둬 버린다. */
+html[data-theme='chapter'] { scroll-snap-type: y proximity; }
+[data-theme='chapter'] .sec,
+[data-theme='chapter'] .foot {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 0;
+  padding-block: 5rem;
+  text-align: left;
+}
+[data-theme='chapter'] .sec + .sec[data-reveal='rule']::before { display: none; }
+[data-theme='chapter'] .label { color: var(--ink-3); }
+[data-theme='chapter'] .title { font-weight: 600; letter-spacing: -0.035em; }
+[data-theme='chapter'] .date__big { font-weight: 700; letter-spacing: -0.045em; }
+[data-theme='chapter'] .names__row,
+[data-theme='chapter'] .count,
+[data-theme='chapter'] .acct__who,
+[data-theme='chapter'] .acct__line { justify-content: flex-start; }
+[data-theme='chapter'] .names__name { font-weight: 600; }
+/* 세로 flex 안에서는 margin-inline: auto 가 stretch 를 이겨서 달력이
+   내용 크기(147px)로 쪼그라든다. 가로 여백을 없애고 늘려 붙인다. */
+[data-theme='chapter'] .cal {
+  margin-inline: 0;
+  max-width: 100%;
+  align-self: stretch;
+}
+[data-theme='chapter'] .tabs { margin-left: 0; }
+[data-theme='chapter'] .acct__card { text-align: left; }
+[data-theme='chapter'] .acct__copy { margin-left: auto; }
+[data-theme='chapter'] .cue { margin-left: 0; }
+
+/* 장 번호 — 화면마다 어디쯤인지 알려준다 */
+[data-theme='chapter'] .sec { counter-increment: chap; position: relative; }
+[data-theme='chapter'] .page { counter-reset: chap; }
+[data-theme='chapter'] .sec::after {
+  content: counter(chap, decimal-leading-zero);
+  position: absolute;
+  right: 0; top: 3.25rem;
+  font-family: var(--font-num);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+
+/* ==========================================================================
+   K — TRAIL · 길을 따라 놓인 사건들
+   ========================================================================== */
+[data-theme='trail'] {
+  --spine: 1.375rem;        /* 길이 지나는 자리 */
+  --sec: 3.25rem;
+}
+[data-theme='trail'] .page { position: relative; }
+/* 길 — 첫 장부터 마지막까지 이어진다 */
+[data-theme='trail'] .page::before {
+  content: '';
+  position: absolute;
+  left: var(--spine);
+  top: 6rem; bottom: 4rem;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    transparent 0, var(--rule) 3rem, var(--rule) calc(100% - 3rem), transparent 100%);
+}
+[data-theme='trail'] .sec,
+[data-theme='trail'] .foot {
+  position: relative;
+  padding-left: 3.25rem;
+  border: 0;
+  text-align: left;
+}
+[data-theme='trail'] .sec + .sec[data-reveal='rule']::before { display: none; }
+
+/* 길 위의 점 — 여기가 한 사건이다 */
+[data-theme='trail'] .sec::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--spine) - 4px);
+  top: calc(var(--sec) + 0.5rem);
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+}
+/* 마지막 장의 점은 채운다 — 도착했다는 뜻 */
+[data-theme='trail'] .sec:last-of-type::after { background: var(--ink); }
+
+[data-theme='trail'] .label { color: var(--ink); font-weight: 500; }
+[data-theme='trail'] .names__row,
+[data-theme='trail'] .count,
+[data-theme='trail'] .acct__who,
+[data-theme='trail'] .acct__line { justify-content: flex-start; }
+[data-theme='trail'] .cal { margin-left: 0; max-width: 100%; }
+[data-theme='trail'] .tabs { margin-left: 0; }
+[data-theme='trail'] .acct__card { text-align: left; }
+[data-theme='trail'] .acct__copy { margin-left: auto; }
+[data-theme='trail'] .cue { margin-left: 0; }
+
+/* --------------------------------------------------------------------------
+   변형이 열 개를 넘었다. 스위처가 한 줄에 안 들어간다.
+   -------------------------------------------------------------------------- */
+.lab { flex-wrap: wrap; max-width: calc(100vw - 2rem); justify-content: center; }
+.lab button { padding: 0 0.625rem; min-width: 2rem; }
